@@ -1,0 +1,9 @@
+import { Stack } from "expo-router";
+
+export default function RootLayout() {
+  return (
+    <Stack
+      screenOptions={{ headerTransparent: false, headerShown: false }}
+    ></Stack>
+  );
+}
