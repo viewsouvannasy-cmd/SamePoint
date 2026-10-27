@@ -1,12 +1,16 @@
 // library
-import { Stack } from "expo-router";
+import { Stack, useRouter } from "expo-router";
+import { useEffect } from "react";
 import { KeyboardProvider } from "react-native-keyboard-controller";
-import { useColorScheme } from "react-native";
 
 import "../global.css";
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
+  const router = useRouter();
+
+  useEffect(() => {
+    router.replace("/(auth)/set-profile");
+  }, []);
 
   return (
     <KeyboardProvider>

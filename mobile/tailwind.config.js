@@ -11,10 +11,14 @@ module.exports = {
     extend: {
       colors: {
         background: "rgb(var(--background) / <alpha-value>)",
+        "background-muted": "rgb(var(--background-muted) / <alpha-value>)",
         "background-inverse": "rgb(var(--background-inverse) / <alpha-value>)",
         foreground: "rgb(var(--foreground) / <alpha-value>)",
         "foreground-inverse": "rgb(var(--foreground-inverse) / <alpha-value>)",
         border: "rgb(var(--border) / <alpha-value>)",
+        card: "rgb(var(--card) / <alpha-value>)",
+        accent: "rgb(var(--accent) / <alpha-value>)",
+        "accent-secondary": "rgb(var(--accent-secondary) / <alpha-value>)",
       },
     },
   },

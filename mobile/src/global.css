@@ -9,13 +9,21 @@
 :root {
   /* backgound */
   --background: 255 255 255;
+  --background-muted: 245 245 245;
   --background-inverse: 17 17 17;
+
+  --accent: 209 213 219;
+  --accent-secondary: 229 231 235;
+
+  /* card */
+  --card: 250 250 250;
 
   /* border */
   --border: 152 152 152;
 
   /* text */
   --foreground: 0 0 0;
+  --foreground-secondary: 120 120 120;
   --foreground-inverse: 255 255 255;
 }
 
@@ -23,13 +31,21 @@
   :root {
     /* backgound */
     --background: 17 17 17;
+    --background-muted: 25 25 25;
     --background-inverse: 255 255 255;
+
+    --accent: 63 63 70;
+    --accent-secondary: 82 82 91;
+
+    /* card */
+    --card: 34 34 34;
 
     /* border */
     --border: 152 152 152;
 
     /* text */
     --foreground: 255 255 255;
+    --foreground-secondary: 120 120 120;
     --foreground-inverse: 0 0 0;
   }
 }
