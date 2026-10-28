@@ -1,9 +1,12 @@
 // library
-import { View, Text, ScrollView, Pressable, TextInput } from "react-native";
+import { View, Text, ScrollView, Pressable } from "react-native";
 import { useState } from "react";
 
 // components
 import { Avatar } from "@/components/avatar/Avatar";
+
+// context
+import { useUserSetProfile } from "@/context/useUserSetProfile";
 
 // constants
 import { AVATAR_NAME } from "@/constants/avatar-name";
@@ -11,6 +14,8 @@ import { BACKGROUND_COLOR } from "@/constants/color";
 
 export function SelectAvatarSection() {
   const [onSection, setOnSection] = useState<"avatar" | "background">("avatar");
+
+  const { data: userForm, setDataForm } = useUserSetProfile();
 
   const numColumns = 5;
   const data = onSection === "avatar" ? AVATAR_NAME : BACKGROUND_COLOR;
@@ -57,12 +62,14 @@ export function SelectAvatarSection() {
                   item === null ? (
                     <View key={index} className="aspect-square flex-1" />
                   ) : (
-                    <View
+                    <Pressable
+                      onPress={() => setDataForm("avatar", item)}
                       key={index}
-                      className="bg-[#d1d5db] rounded-full overflow-hidden flex-1 aspect-square items-center justify-center"
+                      className=" rounded-full overflow-hidden flex-1 aspect-square items-center justify-center"
+                      style={{ backgroundColor: userForm.bg }}
                     >
                       <Avatar avatar={item} size={50} />
-                    </View>
+                    </Pressable>
                   ),
                 )}
               </View>
@@ -82,7 +89,8 @@ export function SelectAvatarSection() {
                   return item === null ? (
                     <View key={index} className="aspect-square flex-1" />
                   ) : (
-                    <View
+                    <Pressable
+                      onPress={() => setDataForm("bg", item)}
                       key={index}
                       className="rounded-full  overflow-hidden flex-1 aspect-square items-center justify-center"
                       style={{ backgroundColor: item }}
