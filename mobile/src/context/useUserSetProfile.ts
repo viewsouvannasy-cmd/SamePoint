@@ -3,6 +3,9 @@ import { create } from "zustand";
 import type { AvatarName } from "@/constants/avatar-name";
 import type { BackgroundColor } from "@/constants/color";
 
+import { AVATAR_NAME } from "@/constants/avatar-name";
+import { BACKGROUND_COLOR } from "@/constants/color";
+
 interface SetProfile {
   name: string;
   avatar: AvatarName;
@@ -13,7 +16,7 @@ interface UseUserSetProfile {
   data: SetProfile;
   setDataForm: (
     which: "name" | "avatar" | "bg",
-    value: string | AvatarName,
+    value: AvatarName | BackgroundColor | string,
   ) => void;
 }
 
