@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latets
+    runs-on: ubuntu-latests
 
     defaults:
       run:
@@ -18,12 +18,12 @@ jobs:
         uses: actions/checkout@v5
 
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v5
         with:
           node-version: 24
 
       - name: Install dependince
-        run: npm install
+        run: npm ci
 
       - name: Run test
         run: npm test
