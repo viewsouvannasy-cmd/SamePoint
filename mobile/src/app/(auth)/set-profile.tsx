@@ -1,13 +1,20 @@
 // library
 import { SafeAreaView } from "react-native-safe-area-context";
-import { View, Text, Pressable } from "react-native";
+import { Text, Pressable } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
+import { useRouter } from "expo-router";
 
 // components
 import { ProfileSection } from "@/components/app/(auth)/set-profile/ProfileSection";
 import { SelectAvatarSection } from "@/components/app/(auth)/set-profile/SelectAvatarSection";
 
 const SetProfile = () => {
+  const router = useRouter();
+
+  function handleDoneSetProfile() {
+    router.push("/(tab)");
+  }
+
   return (
     <SafeAreaView className="bg-background flex-1">
       <KeyboardAwareScrollView
@@ -16,7 +23,10 @@ const SetProfile = () => {
       >
         <ProfileSection />
         <SelectAvatarSection />
-        <Pressable className="p-3 active:bg-background-inverse/70 bg-background-inverse rounded-[10px] items-center">
+        <Pressable
+          onPress={handleDoneSetProfile}
+          className="p-3 active:bg-background-inverse/70 bg-background-inverse rounded-[10px] items-center"
+        >
           <Text className="text-foreground-inverse text-lg">Done</Text>
         </Pressable>
       </KeyboardAwareScrollView>
