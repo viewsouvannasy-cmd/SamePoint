@@ -1,0 +1,7 @@
+services:
+  server:
+    build:
+      context: .
+      target: production
+
+    command: ["npm", "run", "start"]
