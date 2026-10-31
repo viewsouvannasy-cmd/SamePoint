@@ -13,6 +13,9 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 import { useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+// store
+import { useLoginWithGoogle } from "@/store/oath/loginWithGoogle";
+
 // halper function
 import { SamePointLogo } from "@/components/logo/SamePointLogo";
 
@@ -22,6 +25,12 @@ const Signup = () => {
   const router = useRouter();
 
   const [inputEmail, setInputEmail] = useState("");
+
+  const { mutate } = useLoginWithGoogle();
+
+  function handleContineWithGoogle() {
+    mutate();
+  }
 
   return (
     <SafeAreaView className="flex-1 bg-background">
@@ -66,7 +75,10 @@ const Signup = () => {
             <Text className="text-border">Or</Text>
             <View className="bg-border flex-1 h-[1px] " />
           </View>
-          <Pressable className="p-3 flex-row active:bg-background-inverse/70 gap-2 justify-center bg-background-inverse rounded-[10px] items-center ">
+          <Pressable
+            onPress={handleContineWithGoogle}
+            className="p-3 flex-row active:bg-background-inverse/70 gap-2 justify-center bg-background-inverse rounded-[10px] items-center "
+          >
             <Image
               source={require("@/assets/images/google.png")}
               style={{ width: 17, height: 17 }}
