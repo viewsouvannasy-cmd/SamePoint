@@ -1,0 +1,46 @@
+{
+  "expo": {
+    "name": "SamePoint",
+    "slug": "samepoint",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/same-point-logo.png",
+    "scheme": "mobile",
+    "userInterfaceStyle": "automatic",
+    "ios": {
+      "icon": "./assets/same-point-logo.png",
+      "bundleIdentifier": "com.vview.samepoint"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#E6F4FE",
+        "foregroundImage": "./assets/same-point-logo.png",
+        "backgroundImage": "./assets/same-point-logo.png",
+        "monochromeImage": "./assets/same-point-logo.png"
+      },
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "output": "server",
+      "favicon": "./assets/same-point-logo.png"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#208AEF",
+          "image": "./assets/same-point-logo.png",
+          "imageWidth": 76
+        }
+      ],
+      "expo-secure-store",
+      "expo-font",
+      "expo-asset"
+    ],
+    "experiments": {
+      "typedRoutes": true,
+      "reactCompiler": true
+    }
+  }
+}
