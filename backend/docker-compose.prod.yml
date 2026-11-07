@@ -1,0 +1,10 @@
+services:
+  server:
+    build:
+      context: .
+      target: production
+
+    ports:
+      - 4000:4000
+
+    command: ["npm", "start"]
