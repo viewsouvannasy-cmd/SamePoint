@@ -1,0 +1,6 @@
+name: samepoint
+
+services:
+  server:
+    env_file:
+      - ./.env
