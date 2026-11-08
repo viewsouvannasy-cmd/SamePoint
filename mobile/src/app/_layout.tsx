@@ -1,26 +1,17 @@
 import { Stack } from "expo-router";
+import { KeyboardProvider } from "react-native-keyboard-controller";
+import { QueryClientProvider } from "@tanstack/react-query";
 
-import {
-  useFonts,
-  Inter_400Regular,
-  Inter_700Bold,
-} from "@expo-google-fonts/inter";
+import queryClient from "@/config/query-client";
 
 import "../global.css";
 
 export default function RootLayout() {
-  let [fontsLoaded] = useFonts({
-    Inter_400Regular,
-    Inter_700Bold,
-  });
-
-  if (!fontsLoaded) {
-    return null;
-  }
-
   return (
-    <Stack>
-      <Stack.Screen name="index" />
-    </Stack>
+    <QueryClientProvider client={queryClient}>
+      <KeyboardProvider>
+        <Stack screenOptions={{ headerShown: false }} />
+      </KeyboardProvider>
+    </QueryClientProvider>
   );
 }

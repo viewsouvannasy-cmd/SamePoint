@@ -4,22 +4,28 @@
 
 @import "nativewind/theme";
 
-@custom-variant dark (&:where(.dark, .dark *));
-
 :root {
-  -back-ground: #ffffff;
-
+  --background: #ffffff;
+  --background-inverse: #111111;
+  --border: #989898;
   --foreground: #000000;
+  --foreground-inverse: #ffffff;
 }
 
-.dark {
-  --background: #111111;
-
-  --foreground: #ffffff;
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #111111;
+    --background-inverse: #ffffff;
+    --border: #989898;
+    --foreground: #ffffff;
+    --foreground-inverse: #000000;
+  }
 }
 
 @theme inline {
   --color-background: var(--background);
-
+  --color-background-inverse: var(--background-inverse);
+  --color-border: var(--border);
   --color-foreground: var(--foreground);
+  --color-foreground-inverse: var(--foreground-inverse);
 }

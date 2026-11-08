@@ -14,7 +14,7 @@ const wait = (ms: number) =>
     }, ms);
   });
 
-const connectDB = async (retry = 0) => {
+const connectDB = async (retry = 0, ms = 0) => {
   const maxRetries = 5;
   try {
     console.time("connect-time");
@@ -25,15 +25,18 @@ const connectDB = async (retry = 0) => {
     console.log("Neon Read DB Connected", connectReadDB.now);
     console.log("Neon Write DB Connected", connectWriteDB.now);
   } catch (error) {
-    console.log(`Error To NeonDB (retry ${retry}/${maxRetries})`, error);
+    console.log(
+      `Error To NeonDB (retry ${retry}/${maxRetries} ms: ${ms})`,
+      error,
+    );
 
     if (retry === maxRetries) {
       console.error("Cannot Connect To NeonDB, Exiting.");
       process.exit(1);
     }
 
-    await wait(5000);
-    return await connectDB(retry + 1);
+    await wait(ms);
+    return await connectDB(retry + 1, ms + 5000);
   }
 };
 
