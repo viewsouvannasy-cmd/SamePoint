@@ -28,4 +28,6 @@
   --color-border: var(--border);
   --color-foreground: var(--foreground);
   --color-foreground-inverse: var(--foreground-inverse);
+
+  --color-test: var(--test);
 }
