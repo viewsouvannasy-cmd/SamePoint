@@ -21,7 +21,12 @@ function Signin() {
   return (
     <View
       className="bg-background flex-1"
-      style={{ paddingTop: insets.top, paddingBottom: insets.bottom }}
+      style={{
+        paddingTop: insets.top,
+        paddingBottom: insets.bottom,
+        paddingRight: insets.right,
+        paddingLeft: insets.left,
+      }}
     >
       <KeyboardAwareScrollView
         contentContainerClassName="flex-1"

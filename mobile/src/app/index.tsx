@@ -1,15 +1,13 @@
 // library
 import { Text, View } from "react-native";
 import { Redirect } from "expo-router";
-import { useEffect } from "react";
 
 export default function App() {
-  useEffect(() => {
-    const test = () => {
-      return <Redirect href="/(auth)/signin" />;
-    };
-    test();
-  }, []);
+  const isLogin = false;
+
+  if (!isLogin) {
+    return <Redirect href="/(tab)" />;
+  }
 
   return (
     <View className="bg-background flex-1 items-center justify-center">
