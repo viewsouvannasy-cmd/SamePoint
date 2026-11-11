@@ -4,28 +4,29 @@ import {
   Text,
   Pressable,
   StatusBar,
-  TextInput,
   Image,
   useColorScheme,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
-import { useState } from "react";
 
 // components
 import { SamePointLogo } from "@/components/load-state/SamePointLoader";
 
-const signin = () => {
+function Signin() {
   const colorScheme = useColorScheme();
 
   const insets = useSafeAreaInsets();
 
-  const [inputEmail, setInputEmail] = useState("");
-
   return (
     <View
       className="bg-background flex-1"
-      style={{ paddingTop: insets.top, paddingBottom: insets.bottom }}
+      style={{
+        paddingTop: insets.top,
+        paddingBottom: insets.bottom,
+        paddingRight: insets.right,
+        paddingLeft: insets.left,
+      }}
     >
       <KeyboardAwareScrollView
         contentContainerClassName="flex-1"
@@ -48,7 +49,7 @@ const signin = () => {
         </View>
 
         <View className="gap-3 p-4">
-          <View className="gap-3">
+          {/* <View className="gap-3">
             <TextInput
               className="border-border text-foreground rounded-[8px] border p-3"
               placeholder="Enter your email"
@@ -64,7 +65,7 @@ const signin = () => {
             <View className="bg-border h-[1px] flex-1" />
             <Text className="text-border">Or</Text>
             <View className="bg-border h-[1px] flex-1" />
-          </View>
+          </View> */}
           <Pressable className="bg-background-inverse flex-row items-center justify-center rounded-[10px] p-3 active:opacity-75">
             <View className="flex flex-row items-center gap-2">
               <Image
@@ -80,6 +81,6 @@ const signin = () => {
       </KeyboardAwareScrollView>
     </View>
   );
-};
+}
 
-export default signin;
+export default Signin;
