@@ -4,8 +4,8 @@ import { neon } from "@neondatabase/serverless";
 // untils
 import { getEnv } from "../utils/getEnv.js";
 
-const read_sql = neon(getEnv("NEON_READ_URL"));
-const write_sql = neon(getEnv("NEON_WRITE_URL"));
+const read_sql = neon(getEnv("DATABASE_READ_URL"));
+const write_sql = neon(getEnv("DATABASE_WRITE_URL"));
 
 const wait = (ms: number) =>
   new Promise<void>((resolve) => {
@@ -22,8 +22,8 @@ const connectDB = async (retry = 0, ms = 0) => {
     const [connectWriteDB] = await write_sql`SELECT NOW()`;
     console.timeEnd("connect-time");
 
-    console.log("Neon Read DB Connected", connectReadDB.now);
-    console.log("Neon Write DB Connected", connectWriteDB.now);
+    console.log("Database Reading Connected", connectReadDB.now);
+    console.log("Database Writeing Connected", connectWriteDB.now);
   } catch (error) {
     console.log(
       `Error To NeonDB (retry ${retry}/${maxRetries} ms: ${ms})`,
