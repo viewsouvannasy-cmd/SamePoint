@@ -67,8 +67,8 @@
   },
   "jest": {
     "preset": "jest-expo",
-    "setupFilesAfterEnv": [
-      "<rootDir>/tests/**/*.test.{ts,tsx}"
+    "testMatch": [
+      "<rootDir>/test/**/*.test.{ts,tsx}"
     ]
   },
   "overrides": {

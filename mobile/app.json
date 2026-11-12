@@ -30,7 +30,7 @@
         {
           "backgroundColor": "#ffffff",
           "image": "./assets/logo/same-point-logo.png",
-          "imageWidth": 170,
+          "imageWidth": 150,
           "resizeMode": "contain",
           "dark": {
             "image": "./assets/logo/same-point-dark-logo.png",
