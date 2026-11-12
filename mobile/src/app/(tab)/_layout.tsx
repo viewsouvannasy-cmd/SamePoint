@@ -11,16 +11,13 @@ export default function Layout() {
     <NativeTabs tintColor={color}>
       <NativeTabs.Trigger name="index">
         <NativeTabs.Trigger.Icon
-          sf={{
-            default: "folder",
-            selected: "folder.fill",
-          }}
-          md={{
-            default: "folder",
-            selected: "folder_open",
+          sf={{ default: "folder", selected: "folder.fill" }}
+          src={{
+            default: require("@/assets/icon/folder.png"),
+            selected: require("@/assets/icon/folder-open.png"),
           }}
         />
-        <NativeTabs.Trigger.Label>Project</NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Label>project</NativeTabs.Trigger.Label>
       </NativeTabs.Trigger>
 
       <NativeTabs.Trigger name="inbox">
@@ -29,7 +26,10 @@ export default function Layout() {
             default: "tray",
             selected: "tray.fill",
           }}
-          md={{ default: "inbox", selected: "inbox_text" }}
+          src={{
+            default: require("@/assets/icon/inbox.png"),
+            selected: require("@/assets/icon/inbox-text.png"),
+          }}
         />
         <NativeTabs.Trigger.Label>Inbox</NativeTabs.Trigger.Label>
       </NativeTabs.Trigger>
@@ -37,7 +37,7 @@ export default function Layout() {
       <NativeTabs.Trigger name="insights">
         <NativeTabs.Trigger.Icon
           sf={{ default: "chart.bar", selected: "chart.bar.fill" }}
-          md={{ default: "analytics", selected: "analytics" }}
+          src={require("@/assets/icon/analytics.png")}
         />
         <NativeTabs.Trigger.Label>Insights</NativeTabs.Trigger.Label>
       </NativeTabs.Trigger>
