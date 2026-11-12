@@ -1,3 +1,5 @@
+import { useEffect, useMemo } from "react";
+import { Animated, Easing } from "react-native";
 import Svg, { Circle, G, Line, type SvgProps } from "react-native-svg";
 
 type Point = readonly [x: number, y: number];
@@ -28,7 +30,24 @@ const BRANCHES: readonly Branch[] = [
   { lineEnd: [171.47, 83.26], dot: [191.52, 89.96], radius: 17.25 },
 ];
 
-export interface LogoProps extends Omit<
+/**
+ * Timeline of one loop, as fractions of `duration` (0 → 1):
+ *   hub grows → branches shoot out one after another (line, then dot pops)
+ *   → brief hold → whole logo fades out → loop restarts.
+ */
+const HUB_GROW_END = 0.12;
+const BRANCH_FIRST_START = 0.1;
+const BRANCH_STAGGER = 0.1;
+const LINE_DURATION = 0.2;
+const DOT_DELAY = 0.12; // dot starts this long after its line starts
+const DOT_DURATION = 0.15;
+const FADE_START = 0.85;
+
+const AnimatedCircle = Animated.createAnimatedComponent(Circle);
+const AnimatedLine = Animated.createAnimatedComponent(Line);
+const AnimatedG = Animated.createAnimatedComponent(G);
+
+export interface LoaderProps extends Omit<
   SvgProps,
   "width" | "height" | "color" | "viewBox" | "accessibilityLabel"
 > {
@@ -36,18 +55,76 @@ export interface LogoProps extends Omit<
   size?: number;
   /** Any colour react-native-svg accepts. Default: "#000". */
   color?: string;
-  /** Screen-reader label. Pass `null` to hide the logo from screen readers. */
+  /** Length of one full loop in ms. Default: 1800. */
+  duration?: number;
+  /** Screen-reader label. Pass `null` to hide from screen readers. */
   accessibilityLabel?: string | null;
 }
 
-export function SamePointLogo({
+export function SamePointLoader({
   size = 120,
   color = "currentColor",
-  accessibilityLabel = "Logo",
+  duration = 1800,
+  accessibilityLabel = "Loading",
   ...rest
-}: LogoProps) {
+}: LoaderProps) {
   const height = (size * VIEWBOX_HEIGHT) / VIEWBOX_WIDTH;
   const hidden = accessibilityLabel === null;
+
+  // One value drives everything: 0 → 1, looping.
+  const progress = useMemo(() => new Animated.Value(0), []);
+
+  useEffect(() => {
+    progress.setValue(0);
+    const loop = Animated.loop(
+      Animated.timing(progress, {
+        toValue: 1,
+        duration,
+        easing: Easing.linear,
+        // SVG props (r, x2, y2) aren't supported by the native driver.
+        useNativeDriver: false,
+      }),
+    );
+    loop.start();
+    return () => loop.stop();
+  }, [progress, duration]);
+
+  const frames = useMemo(() => {
+    const map = (
+      input: number[],
+      output: number[],
+      easing?: (t: number) => number,
+    ) =>
+      progress.interpolate({
+        inputRange: input,
+        outputRange: output,
+        extrapolate: "clamp",
+        easing,
+      });
+
+    return {
+      opacity: map([0, FADE_START, 1], [1, 1, 0]),
+      hubRadius: map(
+        [0, HUB_GROW_END],
+        [0, HUB.radius],
+        Easing.out(Easing.cubic),
+      ),
+      branches: BRANCHES.map(({ lineEnd, dot, radius }, i) => {
+        const lineStart = BRANCH_FIRST_START + i * BRANCH_STAGGER;
+        const lineStop = lineStart + LINE_DURATION;
+        const dotStart = lineStart + DOT_DELAY;
+        const dotStop = dotStart + DOT_DURATION;
+        const ease = Easing.out(Easing.cubic);
+
+        return {
+          x2: map([lineStart, lineStop], [LINE_START[0], lineEnd[0]], ease),
+          y2: map([lineStart, lineStop], [LINE_START[1], lineEnd[1]], ease),
+          r: map([dotStart, dotStop], [0, radius], Easing.out(Easing.back(2))),
+          dot,
+        };
+      }),
+    };
+  }, [progress]);
 
   return (
     <Svg
@@ -56,32 +133,35 @@ export function SamePointLogo({
       viewBox={`0 0 ${VIEWBOX_WIDTH} ${VIEWBOX_HEIGHT}`}
       fill="none"
       accessible={!hidden}
-      accessibilityRole={hidden ? undefined : "image"}
+      accessibilityRole={hidden ? undefined : "progressbar"}
       accessibilityLabel={hidden ? undefined : accessibilityLabel}
+      accessibilityState={hidden ? undefined : { busy: true }}
       importantForAccessibility={hidden ? "no-hide-descendants" : "auto"}
       {...rest}
     >
-      <Circle
-        cx={HUB.center[0]}
-        cy={HUB.center[1]}
-        r={HUB.radius}
-        fill={color}
-      />
+      <AnimatedG opacity={frames.opacity}>
+        <AnimatedCircle
+          cx={HUB.center[0]}
+          cy={HUB.center[1]}
+          r={frames.hubRadius}
+          fill={color}
+        />
 
-      {BRANCHES.map(({ lineEnd, dot, radius }, i) => (
-        <G key={i}>
-          <Line
-            x1={LINE_START[0]}
-            y1={LINE_START[1]}
-            x2={lineEnd[0]}
-            y2={lineEnd[1]}
-            stroke={color}
-            strokeWidth={STROKE_WIDTH}
-            strokeLinecap="round"
-          />
-          <Circle cx={dot[0]} cy={dot[1]} r={radius} fill={color} />
-        </G>
-      ))}
+        {frames.branches.map(({ x2, y2, r, dot }, i) => (
+          <G key={i}>
+            <AnimatedLine
+              x1={LINE_START[0]}
+              y1={LINE_START[1]}
+              x2={x2}
+              y2={y2}
+              stroke={color}
+              strokeWidth={STROKE_WIDTH}
+              strokeLinecap="round"
+            />
+            <AnimatedCircle cx={dot[0]} cy={dot[1]} r={r} fill={color} />
+          </G>
+        ))}
+      </AnimatedG>
     </Svg>
   );
 }

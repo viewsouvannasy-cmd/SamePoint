@@ -1,0 +1,20 @@
+import { checkEnv } from "@/utils/checkEnv";
+
+const env = {
+  GOOGLE_CLIENT_WEB_ID: checkEnv(
+    process.env.EXPO_PUBLIC_GOOGLE_CLIENT_WEB_ID,
+    "EXPO_PUBLIC_GOOGLE_CLIENT_WEB_ID",
+  ),
+  GOOGLE_CLIENT_IOS_ID: checkEnv(
+    process.env.EXPO_PUBLIC_GOOGLE_CLIENT_IOS_ID,
+    "EXPO_PUBLIC_GOOGLE_CLIENT_IOS_ID",
+  ),
+  SERVER_HOST: checkEnv(
+    process.env.EXPO_PUBLIC_SERVER_HOST,
+    "EXPO_PUBLIC_SERVER_HOST",
+  ),
+};
+
+const { GOOGLE_CLIENT_WEB_ID, GOOGLE_CLIENT_IOS_ID, SERVER_HOST } = env;
+
+export { GOOGLE_CLIENT_WEB_ID, GOOGLE_CLIENT_IOS_ID, SERVER_HOST };

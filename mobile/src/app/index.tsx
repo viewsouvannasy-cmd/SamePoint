@@ -1,19 +1,21 @@
 // library
-import { Text, View } from "react-native";
+import { View, useColorScheme } from "react-native";
 import { Redirect } from "expo-router";
 
-export default function App() {
-  const isLogin = false;
+// components
+import { SamePointLoader } from "@/components/load-state/SamePointLoader";
+import { SamePointLogo } from "@/components/logo/SamePointLogo";
 
-  if (!isLogin) {
-    return <Redirect href="/(tab)" />;
-  }
+export default function App() {
+  const colorScheme = useColorScheme();
+  const isLogin = false;
 
   return (
     <View className="bg-background flex-1 items-center justify-center">
-      <Text className="text-2xl font-bold text-blue-500">
-        Welcome to Nativewin
-      </Text>
+      <SamePointLoader
+        size={100}
+        color={colorScheme === "dark" ? "#fff" : "#000"}
+      />
     </View>
   );
 }
