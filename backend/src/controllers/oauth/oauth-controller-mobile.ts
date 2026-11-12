@@ -9,8 +9,11 @@ import client from "../../configs/google-client.js";
 import tokenSchema from "../../validation/headerToken-valid.js";
 
 // query
-import { createNewUser } from "./oauth-query.js";
-import { updateRefreshToken } from "./oauth-query.js";
+import {
+  createNewUser,
+  updateRefreshToken,
+  findUserByEmail,
+} from "./oauth-query.js";
 
 // utils
 import { getEnv } from "../../utils/getEnv.js";
@@ -50,6 +53,26 @@ const googleResigterMobile = async (
       return res
         .status(400)
         .json({ ok: false, msg: "Invalid Email", data: [] });
+    }
+
+    const [findExistUser] = await findUserByEmail(paylaod.email);
+
+    if (findExistUser) {
+      const accessToken = generateAccessTokenForMobile(findExistUser.user_id);
+      const refreshToken = generateRefreshTokenForMobile(findExistUser.user_id);
+
+      const hashRefreshToken = await bcrypt.hash(refreshToken, 10);
+      await updateRefreshToken(
+        "mobile",
+        hashRefreshToken,
+        findExistUser.user_id,
+      );
+
+      return res.status(201).json({
+        ok: true,
+        msg: "LogIn With Google Success",
+        data: [{ accessToken, refreshToken }],
+      });
     }
 
     let userName = paylaod.name;

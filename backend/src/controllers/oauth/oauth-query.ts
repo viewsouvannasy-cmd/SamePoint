@@ -1,4 +1,4 @@
-import { write_sql } from "../../configs/database.js";
+import { read_sql, write_sql } from "../../configs/database.js";
 
 interface CreateNewUser {
   user_name: string;
@@ -48,4 +48,15 @@ const updateRefreshToken = async (
   }
 };
 
-export { createNewUser, updateRefreshToken };
+const findUserByEmail = async (
+  user_email: string,
+): Promise<[{ user_id: number }] | []> => {
+  return (await read_sql`
+    SELECT 
+      user_id
+    FROM users 
+    WHERE user_email = ${user_email}
+    `) as [{ user_id: number }];
+};
+
+export { createNewUser, updateRefreshToken, findUserByEmail };
