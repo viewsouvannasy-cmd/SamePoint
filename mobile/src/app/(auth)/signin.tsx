@@ -10,13 +10,25 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 
+// api
+import useGoogleResigter from "@/api/oauth/googleResigter";
+
 // components
-import { SamePointLogo } from "@/components/load-state/SamePointLoader";
+import { SamePointLogo } from "@/components/logo/SamePointLogo";
+import LoadingDots from "@/components/load-state/LoadingDots";
 
 function Signin() {
   const colorScheme = useColorScheme();
-
   const insets = useSafeAreaInsets();
+
+  const { mutate, isPending } = useGoogleResigter();
+
+  const handlerResigter = () => {
+    if (isPending) {
+      return;
+    }
+    mutate();
+  };
 
   return (
     <View
@@ -66,16 +78,30 @@ function Signin() {
             <Text className="text-border">Or</Text>
             <View className="bg-border h-[1px] flex-1" />
           </View> */}
-          <Pressable className="bg-background-inverse flex-row items-center justify-center rounded-[10px] p-3 active:opacity-75">
-            <View className="flex flex-row items-center gap-2">
-              <Image
-                source={require("@/assets/images/google.png")}
-                style={{ width: 17, height: 17 }}
+          <Pressable
+            onPress={handlerResigter}
+            disabled={isPending}
+            className="bg-background-inverse h-14 flex-row items-center justify-center rounded-[10px] active:opacity-75"
+          >
+            {!isPending ? (
+              <View className="flex flex-row items-center gap-2">
+                <Image
+                  source={require("@/assets/images/google.png")}
+                  style={{ width: 17, height: 17 }}
+                />
+                <Text className="text-foreground-inverse text-lg">
+                  Continue with Google
+                </Text>
+              </View>
+            ) : (
+              <LoadingDots
+                count={4}
+                size={6}
+                spacing={4}
+                color={colorScheme === "dark" ? "#000" : "#fff"}
+                variant="fade"
               />
-              <Text className="text-foreground-inverse text-lg">
-                Continue with Google
-              </Text>
-            </View>
+            )}
           </Pressable>
         </View>
       </KeyboardAwareScrollView>
