@@ -28,15 +28,27 @@
       [
         "expo-splash-screen",
         {
-          "backgroundColor": "#208AEF",
+          "backgroundColor": "#ffffff",
           "image": "./assets/logo/same-point-logo.png",
-          "imageWidth": 76
+          "imageWidth": 170,
+          "resizeMode": "contain",
+          "dark": {
+            "image": "./assets/logo/same-point-dark-logo.png",
+            "backgroundColor": "#111111"
+          }
         }
       ],
       "expo-secure-store",
       "expo-font",
       "expo-asset",
-      "@react-native-google-signin/google-signin"
+      [
+        "@react-native-google-signin/google-signin",
+        {
+          "iosUrlScheme": "com.googleusercontent.apps.161519798851-n33nmncp21l1e2qlatho6m5lcub1ugrc"
+        }
+      ],
+      "expo-status-bar",
+      "expo-web-browser"
     ],
     "experiments": {
       "typedRoutes": true,
