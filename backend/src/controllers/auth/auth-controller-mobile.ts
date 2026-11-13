@@ -38,8 +38,6 @@ const isUserLogin = async (req: Request, res: Response, next: NextFunction) => {
         .json({ ok: false, msg: "Token Invalid", data: [] });
     }
 
-    console.log(payload);
-
     //  find user in the data
     const findUser = await findUserById(payload.user_id);
 
