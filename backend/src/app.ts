@@ -14,7 +14,7 @@ const app = express();
 app.use(express.json());
 
 // health check
-app.get("/health", (req, res) => res.send("ready"));
+app.get("/health", (req, res) => res.send("ok"));
 
 app.use("/api/v1/auth", authRoute);
 app.use("/api/v1/oauth", oauthRoute);
