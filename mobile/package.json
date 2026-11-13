@@ -68,7 +68,7 @@
   "jest": {
     "preset": "jest-expo",
     "testMatch": [
-      "<rootDir>/tests/**/*.test.{ts,tsx}"
+      "<rootDir>/test/**/*.test.{ts,tsx}"
     ]
   },
   "overrides": {
