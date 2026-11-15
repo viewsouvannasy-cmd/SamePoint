@@ -28,7 +28,7 @@ const getUserInfo = async (req: Request, res: Response, next: NextFunction) => {
         .json({ ok: false, msg: "User Is Not Found", data: [] });
     }
 
-    const [userData] = await getUserData(user_id);
+    const userData = await getUserData(user_id);
 
     res.status(200).json({ ok: true, msg: "Success", data: userData });
   } catch (error) {
