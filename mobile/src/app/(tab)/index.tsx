@@ -18,8 +18,9 @@ import { ProjectItem } from "@/components/app/index/ProjectItem";
 function Project() {
   const insets = useSafeAreaInsets();
   const colorScheme = useColorScheme();
+  const isDark = colorScheme === "dark";
 
-  const searchHight = 55;
+  const searchHight = 60;
 
   const translateY = useSharedValue(0);
   const lastY = useSharedValue(0);
@@ -47,14 +48,12 @@ function Project() {
       }}
       className="bg-background flex-1"
     >
-      <StatusBar
-        barStyle={colorScheme === "dark" ? "light-content" : "dark-content"}
-      />
+      <StatusBar barStyle={isDark ? "light-content" : "dark-content"} />
       <Header />
 
-      <View className="mt-3.75 flex-1 overflow-hidden px-4">
+      <View className="mt-3 flex-1 overflow-hidden px-4">
         <Animated.View
-          className="bg-background px-4"
+          className="bg-background px-4 pt-0.75"
           style={[
             {
               position: "absolute",
@@ -77,7 +76,7 @@ function Project() {
               />
             </View>
             <TextInput
-              className="border-border bg-background-muted rounded-full p-3.5 pl-11"
+              className="bg-background-muted rounded-full border border-transparent p-3.5 pl-11 focus:border-blue-500"
               placeholderTextColor="rgb(120,120,120)"
               placeholder="Search..."
             />
@@ -87,7 +86,7 @@ function Project() {
         <Animated.FlatList
           data={new Array(1)}
           showsVerticalScrollIndicator={false}
-          contentContainerClassName="gap-5 grow pt-[57px]"
+          contentContainerClassName="gap-5 grow pt-[61px]"
           ListFooterComponent={<View className="mb-40"></View>}
           keyExtractor={(_, index) => String(index)}
           renderItem={({ item }) => <ProjectItem />}
