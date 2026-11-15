@@ -16,7 +16,6 @@ export default function App() {
   useEffect(() => {
     const fetchUserLogin = async () => {
       const result = await isUserLogin();
-      console.log(result);
       setIsLogin(result.ok);
     };
     fetchUserLogin();

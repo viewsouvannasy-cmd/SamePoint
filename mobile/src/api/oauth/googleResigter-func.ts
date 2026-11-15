@@ -29,6 +29,13 @@ GoogleSignin.configure({
 const googleResigter = async (): Promise<void> => {
   try {
     await GoogleSignin.hasPlayServices();
+
+    // clear google session to let user select account everytime
+    // when user continue with google
+    try {
+      await GoogleSignin.signOut();
+    } catch {} // do nothing just it not throw error out of this function
+
     const resGoogle = await GoogleSignin.signIn();
     if (!isSuccessResponse(resGoogle)) {
       return;
