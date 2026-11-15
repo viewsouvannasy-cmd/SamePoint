@@ -34,7 +34,7 @@ const googleResigterMobile = async (
     if (!parse.success) {
       return res
         .status(400)
-        .json({ ok: false, msg: parse.error.issues, data: [] });
+        .json({ ok: false, msg: parse.error.issues[0].message, data: [] });
     }
 
     const { data: token } = parse;
@@ -68,7 +68,7 @@ const googleResigterMobile = async (
         findExistUser.user_id,
       );
 
-      return res.status(201).json({
+      return res.status(200).json({
         ok: true,
         msg: "LogIn With Google Success",
         data: [{ accessToken, refreshToken }],

@@ -7,8 +7,16 @@
 :root {
   --background: #ffffff;
   --background-inverse: #111111;
-  --border: #989898;
+  --background-muted: #e5e7eb;
+
+  --card-project: #ffffff;
+
+  --border: #e4e4e4;
+  --border-strong: #9a9a9a;
+  --border-strong-muted: #9a9a9a40;
+
   --foreground: #000000;
+  --foreground-secondary: #525252;
   --foreground-inverse: #ffffff;
 }
 
@@ -16,8 +24,16 @@
   :root {
     --background: #111111;
     --background-inverse: #ffffff;
-    --border: #989898;
+    --background-muted: #2c2c2c;
+
+    --card-project: #272727;
+
+    --border: #4e4e4e;
+    --border-strong: #9a9a9a;
+    --border-strong-muted: #9a9a9a40;
+
     --foreground: #ffffff;
+    --foreground-secondary: #b5b5b5;
     --foreground-inverse: #000000;
   }
 }
@@ -25,9 +41,15 @@
 @theme inline {
   --color-background: var(--background);
   --color-background-inverse: var(--background-inverse);
-  --color-border: var(--border);
-  --color-foreground: var(--foreground);
-  --color-foreground-inverse: var(--foreground-inverse);
+  --color-background-muted: var(--background-muted);
 
-  --color-test: var(--test);
+  --color-card-project: var(--card-project);
+
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-border-strong-muted: var(--border-strong-muted);
+
+  --color-foreground: var(--foreground);
+  --color-foreground-secondary: var(--foreground-secondary);
+  --color-foreground-inverse: var(--foreground-inverse);
 }
