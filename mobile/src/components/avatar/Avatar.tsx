@@ -6,8 +6,8 @@
 //
 // Usage:
 //   import Avatar from './Avatar';
-//   <Avatar userId={user.id} size={48} />
-//   <Avatar userId={user.id} size={96} dark />
+//   <Avatar seed={user.seed} size={48} />
+//   <Avatar seed={user.seed} size={96} dark />
 
 import { memo, useMemo } from "react";
 import { StyleSheet, View, type StyleProp, type ViewStyle } from "react-native";
@@ -137,7 +137,7 @@ export function avatarData(id: string, dark: boolean = false): AvatarData {
 }
 
 interface AvatarProps {
-  userId: string;
+  seed: string;
   size?: number;
   dark?: boolean;
   /** Thin ring around the avatar so it never looks like the app logo. */
@@ -146,13 +146,13 @@ interface AvatarProps {
 }
 
 function Avatar({
-  userId,
+  seed,
   size = 48,
   dark = false,
   ring = true,
   style,
 }: AvatarProps) {
-  const d = useMemo(() => avatarData(userId, dark), [userId, dark]);
+  const d = useMemo(() => avatarData(seed, dark), [seed, dark]);
 
   return (
     <View

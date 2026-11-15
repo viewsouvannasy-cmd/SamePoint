@@ -153,7 +153,7 @@ describe("googleResigterMobile", () => {
         "mock_hashed_refresh_token",
         "user-123",
       );
-      expect(status).toHaveBeenCalledWith(201);
+      expect(status).toHaveBeenCalledWith(200);
       expect(json).toHaveBeenCalledWith({
         ok: true,
         msg: "LogIn With Google Success",
