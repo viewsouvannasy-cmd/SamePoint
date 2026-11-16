@@ -8,7 +8,7 @@ import Avatar from "@/components/avatar/Avatar";
 export function ProjectItem() {
   const colorScheme = useColorScheme();
   return (
-    <View className="border-border bg-card-project gap-1 rounded-xl border p-3 transition-all">
+    <View className="group border-border bg-card-project active:bg-border gap-1 rounded-xl border p-3 transition-all">
       {/* header card section */}
       <View className="flex-row justify-between">
         <Text
@@ -18,7 +18,7 @@ export function ProjectItem() {
         >
           LAOS CAPSTONE
         </Text>
-        <View className="rotate-90">
+        <View className="active:bg-border rotate-90 items-center justify-center rounded-full">
           <Icon
             name="three-dot"
             size={20}
@@ -39,7 +39,7 @@ export function ProjectItem() {
       <View className="mt-2 flex-row items-center justify-between">
         <View className="flex-row items-center gap-2">
           <View className="flex-row">
-            <View className="bg-card-project rounded-ful p-0.75">
+            <View className="bg-card-project group-active:bg-border rounded-full p-0.75">
               <Avatar
                 seed="d"
                 dark={colorScheme === "dark"}
@@ -47,16 +47,15 @@ export function ProjectItem() {
                 ring={false}
               />
             </View>
-            <View className="bg-card-project -ml-3 rounded-full p-0.75">
+            <View className="bg-card-project group-active:bg-border -ml-3 rounded-full p-0.75">
               <Avatar
                 seed="sddf"
                 dark={colorScheme === "dark"}
                 size={27}
-
                 ring={false}
               />
             </View>
-            <View className="bg-card-project -ml-3 rounded-full p-0.75">
+            <View className="bg-card-project group-active:bg-border -ml-3 rounded-full p-0.75">
               <Avatar
                 seed="wewe"
                 size={27}
@@ -68,8 +67,8 @@ export function ProjectItem() {
           <Text className="text-foreground-secondary">+8</Text>
         </View>
 
-        <View className="flex-row items-center gap-3">
-          <View className="bg-border-strong-muted relative h-3 w-22 overflow-hidden rounded-full">
+        <View className="flex-1 flex-row items-center justify-end gap-3">
+          <View className="bg-border-strong-muted relative h-3 w-[35%] overflow-hidden rounded-full">
             <View className="bg-border-strong h-3 w-10 rounded-full" />
           </View>
           <Text className="text-foreground-secondary font-medium">10/28</Text>
