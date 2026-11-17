@@ -1,4 +1,4 @@
-interface BaseReponse {
+export interface BaseReponse {
   ok: boolean;
   msg: string;
 }

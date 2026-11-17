@@ -12,7 +12,7 @@ const server = async () => {
     const port = getEnv("PORT");
 
     app.listen(port, () => {
-      console.log(`Mode = ${getEnv("NODE_ENV")}`);
+      console.log(`ENV = ${getEnv("NODE_ENV")}`);
       console.log(`Server is live on port:${port}`);
     });
   } catch (error) {
