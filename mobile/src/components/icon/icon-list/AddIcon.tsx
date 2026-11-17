@@ -2,7 +2,7 @@ import Svg, { Rect, Path } from "react-native-svg";
 
 import { IconType } from "@/types/icon";
 
-export function NewTaskIcon({
+export default function AddIcon({
   size = 24,
   color = "currentColor",
   strokeWidth = 1.6,

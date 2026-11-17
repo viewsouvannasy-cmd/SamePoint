@@ -2,7 +2,7 @@ import Svg, { Path } from "react-native-svg";
 
 import { IconType } from "@/types/icon";
 
-export function PlusIcon({
+export default function PlusIcon({
   size = 24,
   color = "currentColor",
   strokeWidth = 1.8,
