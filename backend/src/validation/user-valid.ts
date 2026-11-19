@@ -1,5 +1,10 @@
 import z from "zod";
 
-export const getUserInfoSehema = z.object({
-  user_id: z.number().int().positive(),
+export const numberId = z
+  .number("Invalid id")
+  .int("Invalid id")
+  .positive("Invalid id");
+
+export const getUserInfoSchema = z.object({
+  user_id: numberId,
 });

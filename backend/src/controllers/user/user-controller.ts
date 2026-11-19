@@ -2,7 +2,7 @@
 import { getUserData } from "./user-query.js";
 
 // validation
-import { getUserInfoSehema } from "../../validation/user-valid.js";
+import { getUserInfoSchema } from "../../validation/user-valid.js";
 import { findUserById } from "../../utils/query/findUser.js";
 
 // types
@@ -10,7 +10,7 @@ import type { Request, Response, NextFunction } from "express";
 
 const getUserInfo = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const parse = getUserInfoSehema.safeParse(req.body);
+    const parse = getUserInfoSchema.safeParse(req.body);
 
     if (!parse.success) {
       return res
