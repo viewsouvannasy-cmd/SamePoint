@@ -8,10 +8,11 @@ import Avatar from "@/components/avatar/Avatar";
 // main components
 import { StatusTasks } from "./StatusTasks";
 
-import type { TestData } from "@/app/(tab)";
+// type
+import type { ProjectItemData } from "@/types/data";
 
 interface ProjectItemProps {
-  item: TestData;
+  item: ProjectItemData;
 }
 
 export function ProjectItem({ item }: ProjectItemProps) {
@@ -19,15 +20,15 @@ export function ProjectItem({ item }: ProjectItemProps) {
   const isDark = colorScheme === "dark";
 
   const isAllEmpty =
-    item["new-task"].length +
-      item["in-review"].length +
-      item.approved.length ===
-    0;
+    item.new_task.length + item.in_review.length + item.approved.length === 0;
 
+  const total_tasks =
+    item.in_review.length + item.new_task.length + item.approved.length;
+  const total_completed_tasks = item.approved.length;
   const completePretenage =
-    item.total_tasks === 0
+    total_tasks === 0
       ? 0
-      : Math.round((item.completed_task / item.total_tasks) * 100);
+      : Math.round((total_completed_tasks / total_tasks) * 100);
 
   return (
     <View className="group border-border bg-card-project active:bg-border gap-1 rounded-xl border p-3 transition-all">
@@ -55,11 +56,11 @@ export function ProjectItem({ item }: ProjectItemProps) {
         {isAllEmpty && (
           <Text className="text-foreground-secondary">{item.describe}</Text>
         )}
-        {item["new-task"].length && (
-          <StatusTasks state="new-task" data={item["new-task"]} />
+        {item.new_task.length && (
+          <StatusTasks state="new_task" data={item.new_task} />
         )}
-        {item["in-review"].length && (
-          <StatusTasks state="in-review" data={item["in-review"]} />
+        {item.in_review.length && (
+          <StatusTasks state="in_review" data={item.in_review} />
         )}
         {item["approved"].length && (
           <StatusTasks state="approved" data={item["approved"]} />
@@ -70,7 +71,7 @@ export function ProjectItem({ item }: ProjectItemProps) {
       <View className="mt-2 flex-row items-center justify-between">
         <View className="flex-row items-center gap-2">
           <View className="flex-row">
-            {item.member_seeds.slice(0, 4).map((seed, index) => {
+            {item?.member_seeds?.slice(0, 4).map((seed, index) => {
               return (
                 <View
                   key={index}
@@ -83,7 +84,7 @@ export function ProjectItem({ item }: ProjectItemProps) {
             })}
           </View>
           <Text className="text-foreground-secondary">
-            {item.number_of_member > 4 && `+${item.number_of_member - 4}`}
+            {item.member_seeds.length > 4 && `+${item.member_seeds.length - 4}`}
           </Text>
         </View>
 
@@ -95,7 +96,7 @@ export function ProjectItem({ item }: ProjectItemProps) {
             />
           </View>
           <Text className="text-foreground-secondary font-medium">
-            {item.completed_task}/{item.total_tasks}
+            {total_completed_tasks}/{total_tasks}
           </Text>
         </View>
       </View>

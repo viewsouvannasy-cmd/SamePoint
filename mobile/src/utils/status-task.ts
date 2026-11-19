@@ -1,15 +1,15 @@
-type TaskState = "new-task" | "in-review" | "approved";
+type TaskState = "new_task" | "in_review" | "approved";
 interface ColorStatus {
   bg: string;
   border: string;
 }
 
 const COLOR_STATUS: Record<TaskState, ColorStatus> = {
-  "new-task": {
+  new_task: {
     bg: "bg-background-secondary",
     border: "border-border-muted",
   },
-  "in-review": {
+  in_review: {
     bg: "bg-background-warming",
     border: "border-border-warming",
   },
@@ -20,11 +20,11 @@ const COLOR_STATUS: Record<TaskState, ColorStatus> = {
 };
 
 export function getIconStatus(state: TaskState): "add" | "report" | "check" {
-  if (state === "new-task") {
+  if (state === "new_task") {
     return "add";
   }
 
-  if (state === "in-review") {
+  if (state === "in_review") {
     return "report";
   }
 
