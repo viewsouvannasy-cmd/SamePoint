@@ -7,11 +7,11 @@ import Icon from "@/components/icon/Icon";
 import { getIconStatus, getColorStatus } from "@/utils/status-task";
 import { getTimeAgo } from "@/utils/calculate";
 
-import type { Status } from "@/app/(tab)";
+import type { TaskDateList } from "@/types/data";
 
 interface StatusTasksProps {
-  state: "new-task" | "in-review" | "approved";
-  data: Status[];
+  state: "new_task" | "in_review" | "approved";
+  data: TaskDateList[];
 }
 
 export function StatusTasks({ state, data }: StatusTasksProps) {
@@ -23,8 +23,8 @@ export function StatusTasks({ state, data }: StatusTasksProps) {
   return (
     <View className="mt-1.5 gap-1.5">
       <Text className="text-foreground-secondary text-[14px] font-medium">
-        {state === "new-task" && "New Tasks"}
-        {state === "in-review" && "In Reiviews"}
+        {state === "new_task" && "New Tasks"}
+        {state === "in_review" && "In Reiviews"}
         {state === "approved" && "Approved"}
       </Text>
       {data.map((item, index) => {
@@ -40,14 +40,14 @@ export function StatusTasks({ state, data }: StatusTasksProps) {
                 color={isDark ? "white" : "black"}
               />
               <View>
-                <Text className="text-foreground text-sm">{item.job}</Text>
+                <Text className="text-foreground text-sm">{item.jobs}</Text>
                 <Text className="text-foreground-secondary text-xs">
-                  {item.name} · {item.position}
+                  {item.user_name} · {item.position}
                 </Text>
               </View>
             </View>
             <Text className="text-foreground-secondary text-xs">
-              {getTimeAgo(item.time)}
+              {getTimeAgo(item.create_at)}
             </Text>
           </View>
         );

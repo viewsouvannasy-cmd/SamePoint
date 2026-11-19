@@ -9,7 +9,7 @@ export function formatProjectData(
     project_name: string;
     describe: string;
     is_owner: boolean;
-    avatar_seed: string[];
+    member_seeds: string[];
     new_task: TaskDate[];
     in_review: TaskDate[];
     approved: TaskDate[];
@@ -30,14 +30,14 @@ export function formatProjectData(
         project_name: item.project_name,
         describe: item.describe,
         is_owner: item.is_owner,
-        avatar_seed: [item.avatar_seed],
+        member_seeds: [item.avatar_seed],
         new_task: [],
         in_review: [],
         approved: [],
       });
     } else {
       const index = exsitItem[item.p_id].index;
-      result[index].avatar_seed.push(item.avatar_seed);
+      result[index].member_seeds.push(item.avatar_seed);
     }
   }
 
