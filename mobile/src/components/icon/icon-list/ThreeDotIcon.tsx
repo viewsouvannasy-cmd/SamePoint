@@ -2,7 +2,7 @@ import Svg, { Circle } from "react-native-svg";
 
 import type { IconType } from "@/types/icon";
 
-export function ThreeDotIcon({
+export default function ThreeDotIcon({
   size = 24,
   color = "currentColor",
   ...props

@@ -1,8 +1,9 @@
-import { SearchIcon } from "./icon-list/SearchIcon";
-import { ThreeDotIcon } from "./icon-list/ThreeDotIcon";
-import { NewTaskIcon } from "./icon-list/NewTaskIcon";
-import { PlusIcon } from "./icon-list/PlusIcon";
-
+import SearchIcon from "./icon-list/SearchIcon";
+import ThreeDotIcon from "./icon-list/ThreeDotIcon";
+import AddIcon from "./icon-list/AddIcon";
+import PlusIcon from "./icon-list/PlusIcon";
+import ReportIcon from "./icon-list/ReportIcon";
+import CheckIcon from "./icon-list/CheckIcon";
 // types
 import type { IconType } from "@/types/icon";
 import type { ComponentType } from "react";
@@ -10,8 +11,10 @@ import type { ComponentType } from "react";
 const icons = {
   search: SearchIcon,
   "three-dot": ThreeDotIcon,
-  "new-task": NewTaskIcon,
+  add: AddIcon,
   plus: PlusIcon,
+  report: ReportIcon,
+  check: CheckIcon,
 } satisfies Record<string, ComponentType<IconType>>;
 
 type IconName = keyof typeof icons;

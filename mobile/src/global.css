@@ -6,14 +6,20 @@
 
 :root {
   --background: #ffffff;
+  --background-secondary: #f8f8f8;
   --background-inverse: #111111;
   --background-muted: #e5e7eb;
+  --background-warming: #fffed8;
+  --background-approve: #e1eeff;
 
   --card-project: #ffffff;
 
   --border: #e4e4e4;
+  --border-muted: #dedede;
   --border-strong: #9a9a9a;
   --border-strong-muted: #9a9a9a40;
+  --border-warming: #dfdc86;
+  --border-approve: #8bb3eb;
 
   --foreground: #000000;
   --foreground-secondary: #525252;
@@ -23,14 +29,20 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #111111;
+    --background-secondary: #141414;
     --background-inverse: #ffffff;
     --background-muted: #2c2c2c;
+    --background-warming: #a19e4e44;
+    --background-approve: #657fa279;
 
     --card-project: #232323;
 
     --border: #414141;
+    --border-muted: #25252500;
     --border-strong: #9a9a9a;
     --border-strong-muted: #9a9a9a40;
+    --border-warming: #a8a66a;
+    --border-approve: #5988c9;
 
     --foreground: #ffffff;
     --foreground-secondary: #b5b5b5;
@@ -40,14 +52,20 @@
 
 @theme inline {
   --color-background: var(--background);
+  --color-background-secondary: var(--background-secondary);
   --color-background-inverse: var(--background-inverse);
   --color-background-muted: var(--background-muted);
+  --color-background-warming: var(--background-warming);
+  --color-background-approve: var(--background-approve);
 
   --color-card-project: var(--card-project);
 
   --color-border: var(--border);
+  --color-border-muted: var(--border-muted);
   --color-border-strong: var(--border-strong);
   --color-border-strong-muted: var(--border-strong-muted);
+  --color-border-warming: var(--border-warming);
+  --color-border-approve: var(--border-approve);
 
   --color-foreground: var(--foreground);
   --color-foreground-secondary: var(--foreground-secondary);

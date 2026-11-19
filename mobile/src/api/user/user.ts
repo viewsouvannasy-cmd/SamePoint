@@ -1,7 +1,7 @@
 // library
 import { useQuery } from "@tanstack/react-query";
 
-// query
+// func
 import { getUserData } from "./user-func";
 
 // key

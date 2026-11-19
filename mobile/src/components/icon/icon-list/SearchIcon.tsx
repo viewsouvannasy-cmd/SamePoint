@@ -2,7 +2,7 @@ import Svg, { Circle, Line } from "react-native-svg";
 
 import type { IconType } from "@/types/icon";
 
-export function SearchIcon({
+export default function SearchIcon({
   size = 24,
   color = "currentColor",
   strokeWidth = 3,
