@@ -1,7 +1,7 @@
 import z from "zod";
 
-const platformSehema = z.object({
+const platformSchema = z.object({
   platform: z.enum(["mobile", "web"]),
 });
 
-export default platformSehema;
+export default platformSchema;
