@@ -20,11 +20,15 @@ export function ProjectItem({ item }: ProjectItemProps) {
   const isDark = colorScheme === "dark";
 
   const isAllEmpty =
-    item.new_task.length + item.in_review.length + item.approved.length === 0;
+    item.new_task.data.length +
+      item.in_review.data.length +
+      item.approved.data.length ===
+    0;
 
   const total_tasks =
-    item.in_review.length + item.new_task.length + item.approved.length;
-  const total_completed_tasks = item.approved.length;
+    item.new_task.count + item.in_review.count + item.approved.count;
+
+  const total_completed_tasks = item.approved.count;
   const completePretenage =
     total_tasks === 0
       ? 0
@@ -56,14 +60,14 @@ export function ProjectItem({ item }: ProjectItemProps) {
         {isAllEmpty && (
           <Text className="text-foreground-secondary">{item.describe}</Text>
         )}
-        {item.new_task.length && (
-          <StatusTasks state="new_task" data={item.new_task} />
+        {item.new_task.data.length && (
+          <StatusTasks state="new_task" item={item.new_task} />
         )}
-        {item.in_review.length && (
-          <StatusTasks state="in_review" data={item.in_review} />
+        {item.in_review.data.length && (
+          <StatusTasks state="in_review" item={item.in_review} />
         )}
-        {item["approved"].length && (
-          <StatusTasks state="approved" data={item["approved"]} />
+        {item.approved.data.length && (
+          <StatusTasks state="approved" item={item.approved} />
         )}
       </View>
 

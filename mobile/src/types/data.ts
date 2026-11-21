@@ -21,19 +21,21 @@ export interface ProjectItemData {
   p_id: number;
   project_name: string;
   describe: string;
+  is_owner: boolean;
   member_seeds: string[];
-  new_task: TaskDateList[];
-  in_review: TaskDateList[];
-  approved: TaskDateList[];
+  new_task: TaskData;
+  in_review: TaskData;
+  approved: TaskData;
 }
 
-export interface TaskDateList {
-  t_id: number;
-  p_id: number;
-  m_id: number;
-  user_name: string;
-  position: string;
-  jobs: string;
-  current_state: "new_task" | "in_review" | "approved";
-  create_at: Date;
+export interface TaskData {
+  count: number;
+  data: {
+    p_id: number;
+    user_name: string;
+    position: string;
+    jobs: string;
+    current_state: "new_task" | "in_review" | "approved";
+    create_at: Date;
+  }[];
 }

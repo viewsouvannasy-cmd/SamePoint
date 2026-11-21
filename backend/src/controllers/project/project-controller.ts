@@ -2,14 +2,16 @@ import { Request, Response, NextFunction } from "express";
 
 // query
 import {
+  readMemberSeed,
   readProjectList,
   readTaskData,
+  readTotalTaskOfEachState,
   writeNewProject,
 } from "./project-query.js";
 import { writeNewMember } from "./member/member-query.js";
 
 // utils
-import { formatProjectData } from "../../utils/format.js";
+import { formatProjectData } from "../../utils/project/format.js";
 
 // validation
 import { createProjectSchema } from "../../validation/project/project-valid.js";
@@ -60,11 +62,25 @@ const getProjectList = async (
     // get project data
     const projectData = await readProjectList(user_id);
 
-    // get task data
-    const taskData = await readTaskData(user_id);
+    // map project id
+    const projectIdList = projectData.map((item) => item.p_id);
+
+    const [memberSeed, totalEachState, taskData] = await Promise.all([
+      // get member seed
+      readMemberSeed(projectIdList),
+      // get total of each state
+      readTotalTaskOfEachState(projectIdList),
+      // get task data
+      readTaskData(projectIdList),
+    ]);
 
     // format the data
-    const dataWithFormat = formatProjectData(projectData, taskData);
+    const dataWithFormat = formatProjectData(
+      projectData,
+      memberSeed,
+      totalEachState,
+      taskData,
+    );
 
     res
       .status(200)
