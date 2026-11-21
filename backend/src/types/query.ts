@@ -11,16 +11,19 @@ export interface ProjectData {
   project_name: string;
   describe: string;
   is_owner: boolean;
-  avatar_seed: string;
 }
 
 export interface TaskDate {
-  t_id: number;
   p_id: number;
-  m_id: number;
   user_name: string;
   position: string;
   jobs: string;
   current_state: "new_task" | "in_review" | "approved";
   create_at: Date;
+}
+
+export interface TotalEachState {
+  p_id: number;
+  current_state: "new_task" | "in_review" | "approved";
+  count: number;
 }

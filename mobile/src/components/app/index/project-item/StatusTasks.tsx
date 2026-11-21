@@ -7,14 +7,14 @@ import Icon from "@/components/icon/Icon";
 import { getIconStatus, getColorStatus } from "@/utils/status-task";
 import { getTimeAgo } from "@/utils/calculate";
 
-import type { TaskDateList } from "@/types/data";
+import type { TaskData } from "@/types/data";
 
 interface StatusTasksProps {
   state: "new_task" | "in_review" | "approved";
-  data: TaskDateList[];
+  item: TaskData;
 }
 
-export function StatusTasks({ state, data }: StatusTasksProps) {
+export function StatusTasks({ state, item }: StatusTasksProps) {
   const colorScheme = useColorScheme();
   const isDark = colorScheme === "dark";
 
@@ -22,12 +22,20 @@ export function StatusTasks({ state, data }: StatusTasksProps) {
 
   return (
     <View className="mt-1.5 gap-1.5">
-      <Text className="text-foreground-secondary text-[14px] font-medium">
-        {state === "new_task" && "New Tasks"}
-        {state === "in_review" && "In Reiviews"}
-        {state === "approved" && "Approved"}
-      </Text>
-      {data.map((item, index) => {
+      <View className="flex flex-row items-end gap-2">
+        <Text className="text-foreground-secondary text-[14px] font-medium">
+          {state === "new_task" && "New Tasks"}
+          {state === "in_review" && "In Reiviews"}
+          {state === "approved" && "Approved"}
+        </Text>
+        {item.count > 2 && state !== "approved" && (
+          <Text className="text-foreground-secondary text-sm">
+            {`+${item.count - 2}`}
+          </Text>
+        )}
+      </View>
+
+      {item.data.map((item, index) => {
         return (
           <View
             key={index}
