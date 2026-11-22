@@ -4,13 +4,16 @@ export const isProjectOwner = async (
   user_id: number,
   p_id: number,
 ): Promise<boolean> => {
-  const result = await read_sql`
+  const [result] = (await read_sql`
     SELECT 
-        p_id
-    FROM projects 
-    WHERE user_id = ${user_id}
-        AND p_id = ${p_id}
-    `;
+    is_owner
+    FROM members 
+    WHERE p_id = ${p_id} AND user_id = ${user_id}
+    `) as { is_owner: boolean }[];
 
-  return result.length === 0;
+  if (!result) {
+    return false;
+  }
+
+  return result.is_owner;
 };

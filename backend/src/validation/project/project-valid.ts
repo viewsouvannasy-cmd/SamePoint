@@ -15,3 +15,8 @@ export const createProjectSchema = z.object({
     .optional()
     .default(""),
 });
+
+export const archiveProjectSchema = z.object({
+  user_id: numberId,
+  archive: z.boolean({ error: "Please provide required" }),
+});

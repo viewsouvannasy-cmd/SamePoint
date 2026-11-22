@@ -57,11 +57,12 @@ export function ProjectItem({ item }: ProjectItemProps) {
 
       {/* body card section */}
       <View>
-        {isAllEmpty ? (
+        {isAllEmpty && !item.describe ? (
           <Text className="text-foreground-secondary">No describe</Text>
         ) : (
           <Text className="text-foreground-secondary">{item.describe}</Text>
         )}
+
         {item.new_task.data.length > 0 && (
           <StatusTasks state="new_task" item={item.new_task} />
         )}
