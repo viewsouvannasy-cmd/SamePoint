@@ -12,6 +12,9 @@
   --background-warming: #fffed8;
   --background-approve: #e1eeff;
 
+  /* error color */
+  --error: #d93025;
+
   --card-project: #ffffff;
 
   --border: #e4e4e4;
@@ -35,6 +38,9 @@
     --background-warming: #a19e4e44;
     --background-approve: #657fa279;
 
+    /* error color */
+    --error: #a72d27;
+
     --card-project: #232323;
 
     --border: #414141;
@@ -57,6 +63,9 @@
   --color-background-muted: var(--background-muted);
   --color-background-warming: var(--background-warming);
   --color-background-approve: var(--background-approve);
+
+  /* error color */
+  --color-error: var(--error);
 
   --color-card-project: var(--card-project);
 

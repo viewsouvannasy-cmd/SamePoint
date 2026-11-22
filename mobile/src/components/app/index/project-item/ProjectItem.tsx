@@ -35,7 +35,7 @@ export function ProjectItem({ item }: ProjectItemProps) {
       : Math.round((total_completed_tasks / total_tasks) * 100);
 
   return (
-    <View className="group border-border bg-card-project active:bg-border gap-1 rounded-xl border p-3 transition-all">
+    <View className="border-border bg-card-project gap-1 rounded-xl border p-3 transition-all active:opacity-60">
       {/* header card section */}
       <View className="flex-row justify-between">
         <Text
@@ -57,16 +57,18 @@ export function ProjectItem({ item }: ProjectItemProps) {
 
       {/* body card section */}
       <View>
-        {isAllEmpty && (
+        {isAllEmpty ? (
+          <Text className="text-foreground-secondary">No describe</Text>
+        ) : (
           <Text className="text-foreground-secondary">{item.describe}</Text>
         )}
-        {item.new_task.data.length && (
+        {item.new_task.data.length > 0 && (
           <StatusTasks state="new_task" item={item.new_task} />
         )}
-        {item.in_review.data.length && (
+        {item.in_review.data.length > 0 && (
           <StatusTasks state="in_review" item={item.in_review} />
         )}
-        {item.approved.data.length && (
+        {item.approved.data.length > 0 && (
           <StatusTasks state="approved" item={item.approved} />
         )}
       </View>
@@ -79,7 +81,7 @@ export function ProjectItem({ item }: ProjectItemProps) {
               return (
                 <View
                   key={index}
-                  className="bg-card-project group-active:bg-border rounded-full p-0.75"
+                  className="bg-card-project rounded-full p-0.75"
                   style={{ marginLeft: index === 0 ? 0 : -12 }}
                 >
                   <Avatar seed={seed} dark={isDark} size={27} ring={false} />

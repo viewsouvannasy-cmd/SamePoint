@@ -32,6 +32,7 @@ export const readProjectList = async (user_id: number) => {
     INNER JOIN users AS u 
         ON m.user_id = u.user_id
     WHERE m.user_id = ${user_id}
+    ORDER BY p.create_at DESC
     LIMIT 5
     `) as ProjectData[];
 };

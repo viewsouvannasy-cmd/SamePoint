@@ -1,17 +1,36 @@
 // library
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 // func
-import { getProjectListData } from "./project-func";
+import { createProject, getProjectListData } from "./project-func";
+
+// config
+import queryClient from "@/config/query-client";
 
 // constants
 import { PROJECT_LIST } from "@/constants/key-query";
 
+// type
+import type { AxiosError } from "axios";
+import type { CreateProjectError } from "@/types/response";
+
 const useGetProjectListDate = () => {
   return useQuery({
-    queryFn: () => getProjectListData(true),
+    queryFn: () => getProjectListData(false),
     queryKey: PROJECT_LIST,
   });
 };
 
-export { useGetProjectListDate };
+const useCreateProject = () => {
+  return useMutation<
+    void,
+    AxiosError<CreateProjectError>,
+    { project_name: string; describe: string }
+  >({
+    mutationFn: (variable) => createProject(false, variable),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: PROJECT_LIST });
+    },
+  });
+};
+export { useGetProjectListDate, useCreateProject };

@@ -80,6 +80,9 @@ function Project() {
               />
             </View>
             <TextInput
+              style={{
+                color: isDark ? "#ffffff" : "#000000",
+              }}
               className="bg-background-muted rounded-full border border-transparent p-3.5 pl-11 focus:border-blue-500"
               placeholderTextColor="rgb(120,120,120)"
               placeholder="Search..."
