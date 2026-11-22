@@ -32,7 +32,7 @@ const CreateProject = () => {
     if (inputProjectName.length === 0) {
       setErrorResponse({
         point: "project_name",
-        content: "NAme must be at least 5 characters",
+        content: "Name must be at least 5 characters",
       });
       return;
     }
