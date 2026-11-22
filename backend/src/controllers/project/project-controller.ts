@@ -22,25 +22,24 @@ const createProject = async (
   res: Response,
   next: NextFunction,
 ) => {
-  const parse = createProjectSchema.safeParse(req.body);
-  if (!parse.success) {
-    const error = parse.error.issues[0];
-    return res.status(400).json({
-      ok: false,
-      msg: { point: error.path[0], content: error.message },
-      data: [],
-    });
-  }
-
-  const { user_id, project_name, describe } = parse.data;
-
-  const [newProject] = await writeNewProject(project_name, describe);
-
-  await writeNewMember(newProject.p_id, user_id, "admin", true);
-
-  res.status(201).json({ ok: true, msg: "Create project success", data: [] });
   try {
-    console.log("");
+    const parse = createProjectSchema.safeParse(req.body);
+    if (!parse.success) {
+      const error = parse.error.issues[0];
+      return res.status(400).json({
+        ok: false,
+        msg: { point: error.path[0], content: error.message },
+        data: [],
+      });
+    }
+
+    const { user_id, project_name, describe } = parse.data;
+
+    const [newProject] = await writeNewProject(project_name, describe);
+
+    await writeNewMember(newProject.p_id, user_id, "admin", true);
+
+    res.status(201).json({ ok: true, msg: "Create project success", data: [] });
   } catch (error) {
     next(error);
   }
