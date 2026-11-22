@@ -15,6 +15,9 @@ import type { ProjectItemData, TaskData } from "@/types/data";
 //   const completePretenage =
 //     total_tasks === 0 ? 0 : Math.round((total_completed_tasks / total_tasks) * 100);
 //
+//   description display:
+//     isAllEmpty && !item.describe ? "No describe" : item.describe
+//
 //   member overflow: item.member_seeds.length > 4 → `+${length - 4}`
 //   avatar slice:   item.member_seeds.slice(0, 4)
 // ─────────────────────────────────────────────────────────────────────────────
@@ -40,6 +43,13 @@ function getCompletePercentage(approved_count: number, total_tasks: number) {
   return total_tasks === 0
     ? 0
     : Math.round((approved_count / total_tasks) * 100);
+}
+
+function getDisplayedDescription(
+  item: Pick<ProjectItemData, "new_task" | "in_review" | "approved" | "describe">,
+): string {
+  const isAllEmpty = getIsAllEmpty(item);
+  return isAllEmpty && !item.describe ? "No describe" : item.describe;
 }
 
 function getVisibleSeeds(seeds: string[]) {
@@ -96,6 +106,80 @@ describe("ProjectItem — isAllEmpty", () => {
       approved: makeTask(1, 1),
     };
     expect(getIsAllEmpty(item)).toBe(false);
+  });
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+
+describe("ProjectItem — description display (new update)", () => {
+  it("returns 'No describe' when all tasks are empty and describe is an empty string", () => {
+    const item = {
+      describe: "",
+      new_task: makeTask(0, 0),
+      in_review: makeTask(0, 0),
+      approved: makeTask(0, 0),
+    };
+    expect(getDisplayedDescription(item)).toBe("No describe");
+  });
+
+  it("returns 'No describe' when all tasks are empty and describe is undefined or null", () => {
+    const item = {
+      describe: undefined as unknown as string,
+      new_task: makeTask(0, 0),
+      in_review: makeTask(0, 0),
+      approved: makeTask(0, 0),
+    };
+    expect(getDisplayedDescription(item)).toBe("No describe");
+  });
+
+  it("returns describe text when all tasks are empty but describe is provided", () => {
+    const item = {
+      describe: "My awesome project description",
+      new_task: makeTask(0, 0),
+      in_review: makeTask(0, 0),
+      approved: makeTask(0, 0),
+    };
+    expect(getDisplayedDescription(item)).toBe("My awesome project description");
+  });
+
+  it("returns describe text when tasks exist and describe is provided", () => {
+    const item = {
+      describe: "Active project with tasks",
+      new_task: makeTask(1, 1),
+      in_review: makeTask(0, 0),
+      approved: makeTask(0, 0),
+    };
+    expect(getDisplayedDescription(item)).toBe("Active project with tasks");
+  });
+
+  it("returns empty string (not 'No describe') when tasks exist but describe is empty", () => {
+    const item = {
+      describe: "",
+      new_task: makeTask(1, 1),
+      in_review: makeTask(0, 0),
+      approved: makeTask(0, 0),
+    };
+    expect(getDisplayedDescription(item)).toBe("");
+  });
+
+  it("does not show 'No describe' if in_review has tasks, even when describe is empty", () => {
+    const item = {
+      describe: "",
+      new_task: makeTask(0, 0),
+      in_review: makeTask(1, 1),
+      approved: makeTask(0, 0),
+    };
+    expect(getDisplayedDescription(item)).toBe("");
+  });
+
+  it("does not show 'No describe' if approved has tasks, even when describe is empty", () => {
+    const item = {
+      describe: "",
+      new_task: makeTask(0, 0),
+      in_review: makeTask(0, 0),
+      approved: makeTask(2, 2),
+    };
+    expect(getDisplayedDescription(item)).toBe("");
   });
 });
 
