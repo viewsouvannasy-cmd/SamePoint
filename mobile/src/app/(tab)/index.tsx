@@ -13,30 +13,34 @@ import Icon from "@/components/icon/Icon";
 
 // main components
 import { Header } from "@/components/app/index/Header";
-import { ProjectItem } from "@/components/app/index/ProjectItem";
+import { ProjectItem } from "@/components/app/index/project-item/ProjectItem";
+
+// api
+import { useGetProjectListDate } from "@/api/project/project";
+
+const SEARCH_HRIGHT = 60;
 
 function Project() {
   const insets = useSafeAreaInsets();
   const colorScheme = useColorScheme();
   const isDark = colorScheme === "dark";
 
-  const searchHight = 60;
+  const { data } = useGetProjectListDate();
 
   const translateY = useSharedValue(0);
   const lastY = useSharedValue(0);
-
   const onScroll = useAnimatedScrollHandler({
     onScroll: (e) => {
       const y = Math.max(0, e.contentOffset.y);
       const diff = y - lastY.value;
-      translateY.value = clamp(translateY.value - diff, -searchHight, 0);
+      translateY.value = clamp(translateY.value - diff, -SEARCH_HRIGHT, 0);
       lastY.value = y;
     },
   });
 
   const searchStyle = useAnimatedStyle(() => ({
     transform: [{ translateY: translateY.value }],
-    opacity: 1 + translateY.value / searchHight,
+    opacity: 1 + translateY.value / SEARCH_HRIGHT,
   }));
 
   return (
@@ -61,7 +65,7 @@ function Project() {
               left: 0,
               right: 0,
               zIndex: 10,
-              height: searchHight,
+              height: SEARCH_HRIGHT,
             },
             searchStyle,
           ]}
@@ -76,6 +80,9 @@ function Project() {
               />
             </View>
             <TextInput
+              style={{
+                color: isDark ? "#ffffff" : "#000000",
+              }}
               className="bg-background-muted rounded-full border border-transparent p-3.5 pl-11 focus:border-blue-500"
               placeholderTextColor="rgb(120,120,120)"
               placeholder="Search..."
@@ -84,12 +91,12 @@ function Project() {
         </Animated.View>
 
         <Animated.FlatList
-          data={new Array(1)}
+          data={data?.data}
           showsVerticalScrollIndicator={false}
           contentContainerClassName="gap-5 grow pt-[61px]"
           ListFooterComponent={<View className="mb-40"></View>}
           keyExtractor={(_, index) => String(index)}
-          renderItem={({ item }) => <ProjectItem />}
+          renderItem={({ item }) => <ProjectItem item={item} />}
           scrollEventThrottle={16}
           onScroll={onScroll}
         />

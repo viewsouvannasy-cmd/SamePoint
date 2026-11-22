@@ -60,24 +60,7 @@ function Signin() {
           </View>
         </View>
 
-        <View className="gap-3 p-4">
-          {/* <View className="gap-3">
-            <TextInput
-              className="border-border text-foreground rounded-[8px] border p-3"
-              placeholder="Enter your email"
-              placeholderTextColor="#989898"
-              onChangeText={setInputEmail}
-              value={inputEmail}
-            />
-            <Pressable className="bg-background-inverse items-center rounded-[10px] p-3 active:opacity-75">
-              <Text className="text-foreground-inverse text-lg">Continue</Text>
-            </Pressable>
-          </View>
-          <View className="flex-row items-center gap-4">
-            <View className="bg-border h-[1px] flex-1" />
-            <Text className="text-border">Or</Text>
-            <View className="bg-border h-[1px] flex-1" />
-          </View> */}
+        <View className="p-4">
           <Pressable
             onPress={handlerResigter}
             disabled={isPending}
