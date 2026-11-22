@@ -4,8 +4,13 @@ import type {
   TotalEachState,
 } from "../../types/query.js";
 
-// maximum szie of projectData is
+// maximum szie of projectData is 5
+// maximum szie of memberSeend is depend on how many member in that project
+// maximum szie of totalEachState is 15
+// maximum szie of taskDate is 30
 
+// so with we will not lost a lof of performance to
+// format data structure
 export function formatProjectData(
   projectData: ProjectData[],
   memberSeed: { p_id: number; avatar_seed: string }[],

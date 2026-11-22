@@ -39,7 +39,7 @@ export function StatusTasks({ state, item }: StatusTasksProps) {
         return (
           <View
             key={index}
-            className={`${colorStatus.border} ${colorStatus.bg} flex-row items-center justify-between rounded-lg border px-2.75 py-2`}
+            className={`${colorStatus.border} ${colorStatus.bg} flex-row items-center justify-between rounded-lg border px-2.75 py-2 active:opacity-50`}
           >
             <View className="flex-row items-center gap-3">
               <Icon
