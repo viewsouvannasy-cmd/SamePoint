@@ -24,9 +24,12 @@ const createProject = async (
 ) => {
   const parse = createProjectSchema.safeParse(req.body);
   if (!parse.success) {
-    return res
-      .status(400)
-      .json({ ok: false, msg: parse.error.issues[0].message, data: [] });
+    const error = parse.error.issues[0];
+    return res.status(400).json({
+      ok: false,
+      msg: { point: error.path[0], content: error.message },
+      data: [],
+    });
   }
 
   const { user_id, project_name, describe } = parse.data;
