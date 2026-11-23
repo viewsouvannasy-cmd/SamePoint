@@ -21,7 +21,6 @@ export interface ProjectItemData {
   p_id: number;
   project_name: string;
   describe: string;
-  is_owner: boolean;
   member_seeds: string[];
   new_task: TaskData;
   in_review: TaskData;

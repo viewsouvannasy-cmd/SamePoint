@@ -14,6 +14,7 @@
 
   /* error color */
   --error: #d93025;
+  --error-muted: #d931254e;
 
   --card-project: #ffffff;
 
@@ -40,6 +41,7 @@
 
     /* error color */
     --error: #a72d27;
+    --error-muted: #a72d2755;
 
     --card-project: #232323;
 
@@ -66,6 +68,7 @@
 
   /* error color */
   --color-error: var(--error);
+  --color-error-muted: var(--error-muted);
 
   --color-card-project: var(--card-project);
 
