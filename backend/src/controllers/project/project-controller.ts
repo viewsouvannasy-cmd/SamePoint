@@ -1,5 +1,3 @@
-import { Request, Response, NextFunction } from "express";
-
 // query
 import {
   readMemberSeed,
@@ -7,15 +5,25 @@ import {
   readTaskData,
   readTotalTaskOfEachState,
   writeNewProject,
+  writeUpdateArchiveProject,
+  writeUpdateProject,
 } from "./project-query.js";
 import { writeNewMember } from "./member/member-query.js";
 
 // utils
 import { formatProjectData } from "../../utils/project/format.js";
+import { isProjectOwner } from "../../utils/query/checkOwner.js";
+import { isUserMember } from "../../utils/query/checkValid.js";
 
 // validation
-import { createProjectSchema } from "../../validation/project/project-valid.js";
+import {
+  archiveProjectSchema,
+  createProjectSchema,
+} from "../../validation/project/project-valid.js";
 import { getUserInfoSchema } from "../../validation/user-valid.js";
+
+// type
+import type { Request, Response, NextFunction } from "express";
 
 const createProject = async (
   req: Request,
@@ -92,4 +100,107 @@ const getProjectList = async (
   }
 };
 
-export { createProject, getProjectList };
+const updateProject = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const parse = createProjectSchema.safeParse(req.body);
+    if (!parse.success) {
+      const error = parse.error.issues[0];
+      return res.status(400).json({
+        ok: false,
+        msg: { point: error.path[0], content: error.message },
+        data: [],
+      });
+    }
+
+    const { p_id } = req.params;
+    const projectId = Number(p_id);
+    const { user_id, project_name, describe } = parse.data;
+
+    const isOwner = await isProjectOwner(user_id, projectId);
+    if (!isOwner) {
+      return res.status(401).json({
+        ok: false,
+        msg: "You are not be able to edit this project",
+        data: [],
+      });
+    }
+
+    await writeUpdateProject(projectId, project_name, describe);
+
+    res.status(202).json({ ok: true, msg: "Update project success", data: [] });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// const deleteProject = async (
+//   req: Request,
+//   res: Response,
+//   next: NextFunction,
+// ) => {
+//   try {
+//     const parse = numberId.safeParse(req.body.user_id);
+
+//     if (!parse.success) {
+//       return res
+//         .status(400)
+//         .json({ ok: false, msg: parse.error.issues[0].message, data: [] });
+//     }
+
+//     const user_id = parse.data;
+//     const { p_id } = req.params;
+//     const projectId = Number(p_id);
+
+//     const isOwner = await isProjectOwner(user_id, projectId);
+//     if (!isOwner) {
+//       return res.status(401).json({
+//         ok: false,
+//         msg: "You are not be able to delete this project",
+//         data: [],
+//       });
+//     }
+//   } catch (error) {
+//     next(error);
+//   }
+// };
+
+const switchArchiveProject = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const parse = archiveProjectSchema.safeParse(req.body);
+
+    if (!parse.success) {
+      return res
+        .status(400)
+        .json({ ok: false, msg: parse.error.issues[0].message, data: [] });
+    }
+
+    const { user_id, archive } = parse.data;
+    const { p_id } = req.params;
+    const projectId = Number(p_id);
+
+    const isMember = await isUserMember(projectId, user_id);
+    if (!isMember) {
+      return res.status(401).json({
+        ok: false,
+        msg: "You are not a member",
+        data: [],
+      });
+    }
+
+    await writeUpdateArchiveProject(isMember.m_id, archive);
+
+    res.status(202).json({ ok: true, msg: "Switch archive success", data: [] });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export { createProject, getProjectList, updateProject, switchArchiveProject };

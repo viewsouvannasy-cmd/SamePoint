@@ -98,3 +98,28 @@ export const readTaskData = async (projectIdList: number[]) => {
     WHERE cte_t.rn <= 2
     `) as TaskDate[];
 };
+
+export const writeUpdateProject = async (
+  p_id: number,
+  project_name: string,
+  describe: string,
+) => {
+  await write_sql`
+    UPDATE projects 
+    SET project_name = ${project_name},
+        describe = ${describe},
+        update_at = NOW()
+    WHERE p_id = ${p_id}
+    `;
+};
+
+export const writeUpdateArchiveProject = async (
+  m_id: number,
+  archive: boolean,
+) => {
+  await write_sql`
+    UPDATE members
+    SET is_archive_project = ${!archive}
+    WHERE m_id = ${m_id}
+    `;
+};
