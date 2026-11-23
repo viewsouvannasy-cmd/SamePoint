@@ -15,3 +15,13 @@ export const createProjectSchema = z.object({
     .optional()
     .default(""),
 });
+
+export const archiveProjectSchema = z.object({
+  user_id: numberId,
+  archive: z.boolean({ error: "Please provide required" }),
+});
+
+export const searchProjectSchema = z.object({
+  user_id: numberId,
+  search: z.string().trim().toLowerCase(),
+});

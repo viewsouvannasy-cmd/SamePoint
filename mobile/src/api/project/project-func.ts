@@ -31,6 +31,30 @@ const getProjectListData = async (
   }
 };
 
+const searchProject = async (
+  isRetry = false,
+  { search }: { search: string },
+): Promise<ProjectDataList> => {
+  try {
+    const accessToken = getAccessToken();
+    const res = await axios.post<ProjectDataList>(
+      `${SERVER_HOST}/api/v1/project/search`,
+      {
+        search,
+      },
+      {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      },
+    );
+
+    return res.data;
+  } catch (error) {
+    return await handleAccessTokenError(error, isRetry, () =>
+      searchProject(true, { search }),
+    );
+  }
+};
+
 const createProject = async (
   isRetry = false,
   { project_name, describe }: { project_name: string; describe: string },
@@ -55,4 +79,4 @@ const createProject = async (
   }
 };
 
-export { getProjectListData, createProject };
+export { getProjectListData, searchProject, createProject };
