@@ -43,7 +43,6 @@ const createProject = async (
       { headers: { Authorization: `Bearer ${accessToken}` } },
     );
   } catch (error) {
-    console.log(error);
     if (isAxiosError(error) && error.response) {
       if (error.status === 400) {
         throw error;

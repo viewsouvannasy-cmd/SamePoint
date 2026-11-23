@@ -36,6 +36,9 @@ export function formatProjectData(
       data: TaskDate[];
     };
   }[] = [];
+  if (projectData.length === 0) {
+    return [];
+  }
 
   // this is use to store index of project id
   // exmaple {12: {index: 1}}
