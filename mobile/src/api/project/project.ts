@@ -2,7 +2,11 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 // func
-import { createProject, getProjectListData } from "./project-func";
+import {
+  createProject,
+  getProjectListData,
+  searchProject,
+} from "./project-func";
 
 // config
 import queryClient from "@/config/query-client";
@@ -21,6 +25,13 @@ const useGetProjectListDate = () => {
   });
 };
 
+const useSearchProject = (search: string) => {
+  return useQuery({
+    queryFn: () => searchProject(false, { search }),
+    queryKey: [...PROJECT_LIST, search],
+  });
+};
+
 const useCreateProject = () => {
   return useMutation<
     void,
@@ -33,4 +44,5 @@ const useCreateProject = () => {
     },
   });
 };
-export { useGetProjectListDate, useCreateProject };
+
+export { useGetProjectListDate, useCreateProject, useSearchProject };

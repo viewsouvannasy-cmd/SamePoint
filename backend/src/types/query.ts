@@ -10,7 +10,6 @@ export interface ProjectData {
   p_id: number;
   project_name: string;
   describe: string;
-  is_owner: boolean;
 }
 
 export interface TaskDate {
