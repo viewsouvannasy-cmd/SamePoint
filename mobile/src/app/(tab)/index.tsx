@@ -7,6 +7,7 @@ import Animated, {
   useAnimatedStyle,
   useSharedValue,
 } from "react-native-reanimated";
+import { useState } from "react";
 
 // components
 import Icon from "@/components/icon/Icon";
@@ -16,7 +17,7 @@ import { Header } from "@/components/app/index/Header";
 import { ProjectItem } from "@/components/app/index/project-item/ProjectItem";
 
 // api
-import { useGetProjectListDate } from "@/api/project/project";
+import { useGetProjectListDate, useSearchProject } from "@/api/project/project";
 
 const SEARCH_HRIGHT = 60;
 
@@ -25,8 +26,14 @@ function Project() {
   const colorScheme = useColorScheme();
   const isDark = colorScheme === "dark";
 
+  const [inputSearch, setInputSearch] = useState("");
+
+  // project data
   const { data } = useGetProjectListDate();
 
+  const { data: searchData } = useSearchProject(inputSearch);
+
+  // make search bar disappear when scroll dup
   const translateY = useSharedValue(0);
   const lastY = useSharedValue(0);
   const onScroll = useAnimatedScrollHandler({
@@ -37,7 +44,6 @@ function Project() {
       lastY.value = y;
     },
   });
-
   const searchStyle = useAnimatedStyle(() => ({
     transform: [{ translateY: translateY.value }],
     opacity: 1 + translateY.value / SEARCH_HRIGHT,
@@ -83,6 +89,8 @@ function Project() {
               style={{
                 color: isDark ? "#ffffff" : "#000000",
               }}
+              onChangeText={setInputSearch}
+              value={inputSearch}
               className="bg-background-muted rounded-full border border-transparent p-3.5 pl-11 focus:border-blue-500"
               placeholderTextColor="rgb(120,120,120)"
               placeholder="Search..."
@@ -90,16 +98,29 @@ function Project() {
           </View>
         </Animated.View>
 
-        <Animated.FlatList
-          data={data?.data}
-          showsVerticalScrollIndicator={false}
-          contentContainerClassName="gap-5 grow pt-[61px]"
-          ListFooterComponent={<View className="mb-40"></View>}
-          keyExtractor={(_, index) => String(index)}
-          renderItem={({ item }) => <ProjectItem item={item} />}
-          scrollEventThrottle={16}
-          onScroll={onScroll}
-        />
+        {inputSearch.length === 0 ? (
+          <Animated.FlatList
+            data={data?.data}
+            showsVerticalScrollIndicator={false}
+            contentContainerClassName="gap-5 grow pt-[61px]"
+            ListFooterComponent={<View className="mb-40"></View>}
+            keyExtractor={(_, index) => String(index)}
+            renderItem={({ item }) => <ProjectItem item={item} />}
+            scrollEventThrottle={16}
+            onScroll={onScroll}
+          />
+        ) : (
+          <Animated.FlatList
+            data={searchData?.data}
+            showsVerticalScrollIndicator={false}
+            contentContainerClassName="gap-5 grow pt-[61px]"
+            ListFooterComponent={<View className="mb-40"></View>}
+            keyExtractor={(_, index) => String(index)}
+            renderItem={({ item }) => <ProjectItem item={item} />}
+            scrollEventThrottle={16}
+            onScroll={onScroll}
+          />
+        )}
       </View>
     </View>
   );

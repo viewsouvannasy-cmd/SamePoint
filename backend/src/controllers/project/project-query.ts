@@ -24,13 +24,10 @@ export const readProjectList = async (user_id: number) => {
     SELECT 
         p.p_id,
         p.project_name,
-        p.describe,
-        m.is_owner
+        p.describe
     FROM projects AS p
     INNER JOIN members AS m 
         ON p.p_id = m.p_id
-    INNER JOIN users AS u 
-        ON m.user_id = u.user_id
     WHERE m.user_id = ${user_id}
     ORDER BY p.create_at DESC
     LIMIT 5
@@ -97,4 +94,46 @@ export const readTaskData = async (projectIdList: number[]) => {
         ON m.user_id = u.user_id
     WHERE cte_t.rn <= 2
     `) as TaskDate[];
+};
+
+export const writeUpdateProject = async (
+  p_id: number,
+  project_name: string,
+  describe: string,
+) => {
+  await write_sql`
+    UPDATE projects 
+    SET project_name = ${project_name},
+        describe = ${describe},
+        update_at = NOW()
+    WHERE p_id = ${p_id}
+    `;
+};
+
+export const writeUpdateArchiveProject = async (
+  m_id: number,
+  archive: boolean,
+) => {
+  await write_sql`
+    UPDATE members
+    SET is_archive_project = ${!archive}
+    WHERE m_id = ${m_id}
+    `;
+};
+
+export const searchProjectList = async (user_id: number, search: string) => {
+  return (await read_sql`
+  SELECT 
+    p_id,
+    project_name,
+    describe
+  FROM projects 
+  WHERE LOWER(project_name) LIKE '%' || ${search} || '%' 
+    AND p_id IN (
+                SELECT 
+                  p_id
+                FROM members 
+                WHERE user_id = ${user_id}
+                )
+  `) as ProjectData[];
 };
