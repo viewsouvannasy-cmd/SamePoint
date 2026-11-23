@@ -4,6 +4,7 @@ import {
   readProjectList,
   readTaskData,
   readTotalTaskOfEachState,
+  searchProjectList,
   writeNewProject,
   writeUpdateArchiveProject,
   writeUpdateProject,
@@ -19,6 +20,7 @@ import { isUserMember } from "../../utils/query/checkValid.js";
 import {
   archiveProjectSchema,
   createProjectSchema,
+  searchProjectSchema,
 } from "../../validation/project/project-valid.js";
 import { getUserInfoSchema } from "../../validation/user-valid.js";
 
@@ -203,4 +205,60 @@ const switchArchiveProject = async (
   }
 };
 
-export { createProject, getProjectList, updateProject, switchArchiveProject };
+const searchProject = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const parse = searchProjectSchema.safeParse(req.body);
+    if (!parse.success) {
+      return res
+        .status(400)
+        .json({ ok: false, msg: parse.error.issues[0].message, data: [] });
+    }
+
+    const { user_id, search } = parse.data;
+
+    if (search === "") {
+      res.status(200).json({ ok: true, msg: "Search success", data: [] });
+    }
+
+    // get project data
+    const resultSearch = await searchProjectList(user_id, search);
+
+    // map project id
+    const projectIdList = resultSearch.map((item) => item.p_id);
+
+    const [memberSeed, totalEachState, taskData] = await Promise.all([
+      // get member seed
+      readMemberSeed(projectIdList),
+      // get total of each state
+      readTotalTaskOfEachState(projectIdList),
+      // get task data
+      readTaskData(projectIdList),
+    ]);
+
+    // format the data
+    const dataWithFormat = formatProjectData(
+      resultSearch,
+      memberSeed,
+      totalEachState,
+      taskData,
+    );
+
+    res
+      .status(200)
+      .json({ ok: true, msg: "Search success", data: dataWithFormat });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export {
+  createProject,
+  getProjectList,
+  updateProject,
+  switchArchiveProject,
+  searchProject,
+};
