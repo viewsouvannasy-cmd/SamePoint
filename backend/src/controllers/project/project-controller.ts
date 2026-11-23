@@ -221,7 +221,9 @@ const searchProject = async (
     const { user_id, search } = parse.data;
 
     if (search === "") {
-      res.status(200).json({ ok: true, msg: "Search success", data: [] });
+      return res
+        .status(200)
+        .json({ ok: true, msg: "Search success", data: [] });
     }
 
     // get project data
