@@ -2,7 +2,7 @@
 import { View, Text, useColorScheme } from "react-native";
 
 // components
-import Icon from "@/components/icon/Icon";
+
 import Avatar from "@/components/avatar/Avatar";
 
 // main components
@@ -35,7 +35,7 @@ export function ProjectItem({ item }: ProjectItemProps) {
       : Math.round((total_completed_tasks / total_tasks) * 100);
 
   return (
-    <View className="border-border bg-card-project gap-1 rounded-xl border p-3 transition-all active:opacity-60">
+    <View className="border-border bg-card-project relative gap-1 rounded-xl border p-3 transition-all active:opacity-60">
       {/* header card section */}
       <View className="flex-row justify-between">
         <Text
@@ -45,14 +45,6 @@ export function ProjectItem({ item }: ProjectItemProps) {
         >
           {item.project_name}
         </Text>
-        <View className="active:bg-border rotate-90 items-center justify-center rounded-full">
-          <Icon
-            name="three-dot"
-            size={20}
-            strokeWidth={4}
-            color={colorScheme === "dark" ? "white" : "black"}
-          />
-        </View>
       </View>
 
       {/* body card section */}

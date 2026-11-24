@@ -22,17 +22,17 @@ export const writeNewProject = async (
 export const readProjectList = async (user_id: number) => {
   return (await read_sql`
     SELECT 
-        p.p_id,
-        p.project_name,
-        p.describe,
-        m.is_owner
-    FROM projects AS p
-    INNER JOIN members AS m 
-        ON p.p_id = m.p_id
-    INNER JOIN users AS u 
-        ON m.user_id = u.user_id
-    WHERE m.user_id = ${user_id}
-    ORDER BY p.create_at DESC
+      p_id,
+      project_name,
+      describe
+    FROM projects
+    WHERE p_id IN (
+                SELECT 
+                  p_id
+                FROM members 
+                WHERE user_id = ${user_id}
+                )
+    ORDER BY create_at DESC
     LIMIT 5
     `) as ProjectData[];
 };
@@ -122,4 +122,21 @@ export const writeUpdateArchiveProject = async (
     SET is_archive_project = ${!archive}
     WHERE m_id = ${m_id}
     `;
+};
+
+export const searchProjectList = async (user_id: number, search: string) => {
+  return (await read_sql`
+  SELECT 
+    p_id,
+    project_name,
+    describe
+  FROM projects 
+  WHERE LOWER(project_name) LIKE '%' || ${search} || '%' 
+    AND p_id IN (
+                SELECT 
+                  p_id
+                FROM members 
+                WHERE user_id = ${user_id}
+                )
+  `) as ProjectData[];
 };
