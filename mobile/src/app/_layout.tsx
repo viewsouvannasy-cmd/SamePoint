@@ -18,12 +18,32 @@ export default function RootLayout() {
           <Stack.Screen name="(tab)" options={{ headerShown: false }} />
           <Stack.Screen name="(auth)" options={{ headerShown: false }} />
           <Stack.Screen
-            name="create-project"
+            name="(project)/create-project"
+
             options={{
               headerStyle: {
                 backgroundColor: isDark ? "#111111" : "#ffffff",
               },
               title: "Create Project",
+              headerTitleStyle: {
+                fontSize: 18,
+                fontWeight: "600",
+                color: isDark ? "#ffffff" : "#000000",
+              },
+              headerTransparent: false,
+              headerBackButtonDisplayMode: "minimal",
+              headerShadowVisible: false,
+            }}
+          />
+
+          {/* setting */}
+          <Stack.Screen
+            name="(setting)"
+            options={{
+              headerStyle: {
+                backgroundColor: isDark ? "#111111" : "#ffffff",
+              },
+              title: "Setting",
               headerTitleStyle: {
                 fontSize: 18,
                 fontWeight: "600",
