@@ -31,7 +31,9 @@ export function Header() {
         {!data ? (
           <View className="h-10.75 w-10.75 rounded-full bg-gray-400" />
         ) : (
-          <Avatar seed={data.data[0]?.avatar_seed} size={38} dark={isDark} />
+          <Pressable onPress={() => router.push("/(setting)")}>
+            <Avatar seed={data.data[0]?.avatar_seed} size={38} dark={isDark} />
+          </Pressable>
         )}
       </View>
     </View>
