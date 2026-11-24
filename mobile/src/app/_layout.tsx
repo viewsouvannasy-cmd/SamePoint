@@ -19,6 +19,7 @@ export default function RootLayout() {
           <Stack.Screen name="(auth)" options={{ headerShown: false }} />
           <Stack.Screen
             name="(project)/create-project"
+
             options={{
               headerStyle: {
                 backgroundColor: isDark ? "#111111" : "#ffffff",

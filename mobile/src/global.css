@@ -7,7 +7,11 @@
 :root {
   --background: #ffffff;
   --background-secondary: #f8f8f8;
+
   --background-secondary-muted: #f4f4f4;
+  --background-inverse: #111111;
+  --background-muted: #e5e7eb;
+
   --background-inverse: #111111;
   --background-muted: #e5e7eb;
 
@@ -37,6 +41,7 @@
     --background: #111111;
     --background-secondary: #141414;
     --background-secondary-muted: #181818;
+
     --background-inverse: #ffffff;
     --background-muted: #2c2c2c;
     --background-warming: #a19e4e44;
