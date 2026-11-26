@@ -14,6 +14,9 @@ vi.mock("../../../../src/utils/getEnv.js", () => ({
 vi.mock("../../../../src/controllers/oauth/oauth-query.js", () => ({
   findUserByEmail: vi.fn(),
   createNewUser: vi.fn(),
+}));
+
+vi.mock("../../../../src/utils/query/update.js", () => ({
   updateRefreshToken: vi.fn(),
 }));
 
@@ -34,12 +37,18 @@ vi.mock("bcrypt", () => ({
 
 // --- Imports (after mocks) ---
 
+import bcrypt from "bcrypt";
 import client from "../../../../src/configs/google-client.js";
 import {
   findUserByEmail,
   createNewUser,
-  updateRefreshToken,
 } from "../../../../src/controllers/oauth/oauth-query.js";
+import { updateRefreshToken } from "../../../../src/utils/query/update.js";
+import { generateUserSeed } from "../../../../src/utils/generate/generate.js";
+import {
+  generateAccessTokenForMobile,
+  generateRefreshTokenForMobile,
+} from "../../../../src/utils/generate/generateToken.js";
 import { googleResigterMobile } from "../../../../src/controllers/oauth/oauth-controller-mobile.js";
 
 // --- Helpers ---
@@ -54,7 +63,7 @@ const mockNext = () => vi.fn() as unknown as NextFunction;
 
 const makeReq = (token: unknown): Request => ({ token }) as unknown as Request;
 
-const makeTicket = (payload: object | null) => ({
+const makeTicket = (payload: object | null | undefined) => ({
   getPayload: vi.fn(() => payload),
 });
 
@@ -65,33 +74,80 @@ describe("googleResigterMobile", () => {
     vi.clearAllMocks();
   });
 
-  // ── Validation ────────────────────────────────────────────────────────────
+  // ── Token validation ──────────────────────────────────────────────────────
 
   describe("token validation", () => {
     it("returns 400 when token is missing (undefined)", async () => {
       const req = makeReq(undefined);
       const { res, status, json } = mockResponse();
+      const next = mockNext();
 
-      await googleResigterMobile(req, res, mockNext());
+      await googleResigterMobile(req, res, next);
 
       expect(status).toHaveBeenCalledWith(400);
-      expect(json).toHaveBeenCalledWith(expect.objectContaining({ ok: false }));
+      expect(json).toHaveBeenCalledWith({
+        ok: false,
+        msg: expect.any(String),
+        data: [],
+      });
+      expect(client.verifyIdToken).not.toHaveBeenCalled();
+      expect(next).not.toHaveBeenCalled();
     });
 
     it("returns 400 when token is an empty string", async () => {
       const req = makeReq("");
       const { res, status, json } = mockResponse();
+      const next = mockNext();
 
-      await googleResigterMobile(req, res, mockNext());
+      await googleResigterMobile(req, res, next);
 
       expect(status).toHaveBeenCalledWith(400);
-      expect(json).toHaveBeenCalledWith(expect.objectContaining({ ok: false }));
+      expect(json).toHaveBeenCalledWith({
+        ok: false,
+        msg: expect.any(String),
+        data: [],
+      });
+      expect(client.verifyIdToken).not.toHaveBeenCalled();
+      expect(next).not.toHaveBeenCalled();
+    });
+
+    it("returns 400 when token is not a string", async () => {
+      const req = makeReq(12345);
+      const { res, status, json } = mockResponse();
+      const next = mockNext();
+
+      await googleResigterMobile(req, res, next);
+
+      expect(status).toHaveBeenCalledWith(400);
+      expect(json).toHaveBeenCalledWith({
+        ok: false,
+        msg: expect.any(String),
+        data: [],
+      });
+      expect(client.verifyIdToken).not.toHaveBeenCalled();
+      expect(next).not.toHaveBeenCalled();
     });
   });
 
-  // ── Google payload ────────────────────────────────────────────────────────
+  // ── Google token verification ─────────────────────────────────────────────
 
   describe("Google token verification", () => {
+    it("verifies token against web and iOS client audiences", async () => {
+      vi.mocked(client.verifyIdToken).mockResolvedValueOnce(
+        makeTicket(null) as never,
+      );
+
+      const req = makeReq("valid_token");
+      const { res } = mockResponse();
+
+      await googleResigterMobile(req, res, mockNext());
+
+      expect(client.verifyIdToken).toHaveBeenCalledWith({
+        idToken: "valid_token",
+        audience: ["mock_GOOGLE_CLIENT_WEB_ID", "mock_GOOGLE_CLIENT_IOS_ID"],
+      });
+    });
+
     it("returns 400 when getPayload() returns null", async () => {
       vi.mocked(client.verifyIdToken).mockResolvedValueOnce(
         makeTicket(null) as never,
@@ -99,8 +155,9 @@ describe("googleResigterMobile", () => {
 
       const req = makeReq("valid_token");
       const { res, status, json } = mockResponse();
+      const next = mockNext();
 
-      await googleResigterMobile(req, res, mockNext());
+      await googleResigterMobile(req, res, next);
 
       expect(status).toHaveBeenCalledWith(400);
       expect(json).toHaveBeenCalledWith({
@@ -108,6 +165,8 @@ describe("googleResigterMobile", () => {
         msg: "Invalid Email",
         data: [],
       });
+      expect(findUserByEmail).not.toHaveBeenCalled();
+      expect(next).not.toHaveBeenCalled();
     });
 
     it("returns 400 when payload has no email", async () => {
@@ -117,8 +176,9 @@ describe("googleResigterMobile", () => {
 
       const req = makeReq("valid_token");
       const { res, status, json } = mockResponse();
+      const next = mockNext();
 
-      await googleResigterMobile(req, res, mockNext());
+      await googleResigterMobile(req, res, next);
 
       expect(status).toHaveBeenCalledWith(400);
       expect(json).toHaveBeenCalledWith({
@@ -126,13 +186,36 @@ describe("googleResigterMobile", () => {
         msg: "Invalid Email",
         data: [],
       });
+      expect(findUserByEmail).not.toHaveBeenCalled();
+      expect(next).not.toHaveBeenCalled();
+    });
+
+    it("returns 400 when payload email is an empty string", async () => {
+      vi.mocked(client.verifyIdToken).mockResolvedValueOnce(
+        makeTicket({ email: "", name: "Empty Email" }) as never,
+      );
+
+      const req = makeReq("valid_token");
+      const { res, status, json } = mockResponse();
+      const next = mockNext();
+
+      await googleResigterMobile(req, res, next);
+
+      expect(status).toHaveBeenCalledWith(400);
+      expect(json).toHaveBeenCalledWith({
+        ok: false,
+        msg: "Invalid Email",
+        data: [],
+      });
+      expect(findUserByEmail).not.toHaveBeenCalled();
+      expect(next).not.toHaveBeenCalled();
     });
   });
 
-  // ── Existing user (login) ─────────────────────────────────────────────────
+  // ── Existing user (login flow) ────────────────────────────────────────────
 
   describe("when user already exists (login flow)", () => {
-    it("returns 201 with tokens and 'LogIn With Google Success' message", async () => {
+    it("returns 200 with tokens and 'LogIn With Google Success' message", async () => {
       vi.mocked(client.verifyIdToken).mockResolvedValueOnce(
         makeTicket({
           email: "existing@example.com",
@@ -140,18 +223,25 @@ describe("googleResigterMobile", () => {
         }) as never,
       );
       vi.mocked(findUserByEmail).mockResolvedValueOnce([
-        { user_id: "user-123" },
+        { user_id: 123 },
       ] as never);
 
       const req = makeReq("valid_token");
       const { res, status, json } = mockResponse();
+      const next = mockNext();
 
-      await googleResigterMobile(req, res, mockNext());
+      await googleResigterMobile(req, res, next);
 
+      expect(findUserByEmail).toHaveBeenCalledWith("existing@example.com");
+      expect(createNewUser).not.toHaveBeenCalled();
+      expect(generateUserSeed).not.toHaveBeenCalled();
+      expect(generateAccessTokenForMobile).toHaveBeenCalledWith(123);
+      expect(generateRefreshTokenForMobile).toHaveBeenCalledWith(123);
+      expect(bcrypt.hash).toHaveBeenCalledWith("mock_refresh_token", 10);
       expect(updateRefreshToken).toHaveBeenCalledWith(
         "mobile",
         "mock_hashed_refresh_token",
-        "user-123",
+        123,
       );
       expect(status).toHaveBeenCalledWith(200);
       expect(json).toHaveBeenCalledWith({
@@ -164,10 +254,11 @@ describe("googleResigterMobile", () => {
           },
         ],
       });
+      expect(next).not.toHaveBeenCalled();
     });
   });
 
-  // ── New user (register) ───────────────────────────────────────────────────
+  // ── New user (register flow) ──────────────────────────────────────────────
 
   describe("when user does not exist (register flow)", () => {
     it("creates a new user and returns 201 with 'SignIn With Google Success' message", async () => {
@@ -176,14 +267,16 @@ describe("googleResigterMobile", () => {
       );
       vi.mocked(findUserByEmail).mockResolvedValueOnce([] as never);
       vi.mocked(createNewUser).mockResolvedValueOnce([
-        { user_id: "user-456" },
+        { user_id: 456 },
       ] as never);
 
       const req = makeReq("valid_token");
       const { res, status, json } = mockResponse();
+      const next = mockNext();
 
-      await googleResigterMobile(req, res, mockNext());
+      await googleResigterMobile(req, res, next);
 
+      expect(generateUserSeed).toHaveBeenCalledWith("New User");
       expect(createNewUser).toHaveBeenCalledWith({
         user_name: "New User",
         user_email: "new@example.com",
@@ -191,10 +284,13 @@ describe("googleResigterMobile", () => {
         is_active: true,
         provider: "google",
       });
+      expect(generateAccessTokenForMobile).toHaveBeenCalledWith(456);
+      expect(generateRefreshTokenForMobile).toHaveBeenCalledWith(456);
+      expect(bcrypt.hash).toHaveBeenCalledWith("mock_refresh_token", 10);
       expect(updateRefreshToken).toHaveBeenCalledWith(
         "mobile",
         "mock_hashed_refresh_token",
-        "user-456",
+        456,
       );
       expect(status).toHaveBeenCalledWith(201);
       expect(json).toHaveBeenCalledWith({
@@ -207,6 +303,7 @@ describe("googleResigterMobile", () => {
           },
         ],
       });
+      expect(next).not.toHaveBeenCalled();
     });
 
     it("derives username from email prefix when payload.name is missing", async () => {
@@ -215,7 +312,7 @@ describe("googleResigterMobile", () => {
       );
       vi.mocked(findUserByEmail).mockResolvedValueOnce([] as never);
       vi.mocked(createNewUser).mockResolvedValueOnce([
-        { user_id: "user-789" },
+        { user_id: 789 },
       ] as never);
 
       const req = makeReq("valid_token");
@@ -223,8 +320,30 @@ describe("googleResigterMobile", () => {
 
       await googleResigterMobile(req, res, mockNext());
 
+      expect(generateUserSeed).toHaveBeenCalledWith("john.doe");
       expect(createNewUser).toHaveBeenCalledWith(
         expect.objectContaining({ user_name: "john.doe" }),
+      );
+      expect(status).toHaveBeenCalledWith(201);
+    });
+
+    it("derives username from email prefix when payload.name is empty", async () => {
+      vi.mocked(client.verifyIdToken).mockResolvedValueOnce(
+        makeTicket({ email: "jane.smith@example.com", name: "" }) as never,
+      );
+      vi.mocked(findUserByEmail).mockResolvedValueOnce([] as never);
+      vi.mocked(createNewUser).mockResolvedValueOnce([
+        { user_id: 790 },
+      ] as never);
+
+      const req = makeReq("valid_token");
+      const { res, status } = mockResponse();
+
+      await googleResigterMobile(req, res, mockNext());
+
+      expect(generateUserSeed).toHaveBeenCalledWith("jane.smith");
+      expect(createNewUser).toHaveBeenCalledWith(
+        expect.objectContaining({ user_name: "jane.smith" }),
       );
       expect(status).toHaveBeenCalledWith(201);
     });
@@ -269,6 +388,44 @@ describe("googleResigterMobile", () => {
       );
       vi.mocked(findUserByEmail).mockResolvedValueOnce([] as never);
       vi.mocked(createNewUser).mockRejectedValueOnce(error);
+
+      const req = makeReq("valid_token");
+      const { res } = mockResponse();
+      const next = mockNext();
+
+      await googleResigterMobile(req, res, next);
+
+      expect(next).toHaveBeenCalledWith(error);
+    });
+
+    it("calls next(error) when bcrypt.hash throws", async () => {
+      const error = new Error("Hashing failed");
+      vi.mocked(client.verifyIdToken).mockResolvedValueOnce(
+        makeTicket({ email: "existing@example.com", name: "User" }) as never,
+      );
+      vi.mocked(findUserByEmail).mockResolvedValueOnce([
+        { user_id: 123 },
+      ] as never);
+      vi.mocked(bcrypt.hash).mockRejectedValueOnce(error as never);
+
+      const req = makeReq("valid_token");
+      const { res } = mockResponse();
+      const next = mockNext();
+
+      await googleResigterMobile(req, res, next);
+
+      expect(next).toHaveBeenCalledWith(error);
+    });
+
+    it("calls next(error) when updateRefreshToken throws", async () => {
+      const error = new Error("Update refresh token failed");
+      vi.mocked(client.verifyIdToken).mockResolvedValueOnce(
+        makeTicket({ email: "existing@example.com", name: "User" }) as never,
+      );
+      vi.mocked(findUserByEmail).mockResolvedValueOnce([
+        { user_id: 123 },
+      ] as never);
+      vi.mocked(updateRefreshToken).mockRejectedValueOnce(error);
 
       const req = makeReq("valid_token");
       const { res } = mockResponse();

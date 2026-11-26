@@ -76,7 +76,6 @@ const handleLogOutMobile = async (
   next: NextFunction,
 ) => {
   try {
-    console.log("have run");
     const parse = validToken.safeParse(req.token);
 
     if (!parse.success) {
