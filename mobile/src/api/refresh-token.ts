@@ -5,7 +5,7 @@ import * as SecureStore from "expo-secure-store";
 
 import { SERVER_HOST } from "@/config/env";
 
-import type { IsUserLogin as RefreshToken } from "@/types/response";
+import type { RefreshToken } from "@/types/response";
 
 let refreshPromise: null | Promise<void> = null;
 

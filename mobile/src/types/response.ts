@@ -7,7 +7,7 @@ export interface GoogleResigter extends BaseReponse {
   data: [{ accessToken: string; refreshToken: string }];
 }
 
-export interface IsUserLogin extends BaseReponse {
+export interface RefreshToken extends BaseReponse {
   data: [{ accessToken: string }];
 }
 
