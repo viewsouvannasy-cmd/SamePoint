@@ -8,6 +8,7 @@ export const handleAccessTokenError = async <T>(
   retry: () => Promise<T>,
 ): Promise<T> => {
   if (isAxiosError(error) && error.response) {
+    console.log(error, error.response.data);
     if (error.response.status === 401 && !error.response.data.ok_verify_token) {
       const msg = error.response.data.msg;
 

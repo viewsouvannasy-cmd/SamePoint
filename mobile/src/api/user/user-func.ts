@@ -9,7 +9,7 @@ import { getAccessToken } from "@/store/token/accessToken";
 import { SERVER_HOST } from "@/config/env";
 
 // type
-import type { User } from "@/types/data";
+import type { User, UserProfile } from "@/types/data";
 
 const getUserData = async (isRetry = false): Promise<User> => {
   try {
@@ -26,4 +26,22 @@ const getUserData = async (isRetry = false): Promise<User> => {
   }
 };
 
-export { getUserData };
+const getUserProfile = async (isRetry = false): Promise<UserProfile> => {
+  try {
+    const accessToken = getAccessToken();
+    const res = await axios.get<UserProfile>(
+      `${SERVER_HOST}/api/v1/user/profile`,
+      {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      },
+    );
+
+    return res.data;
+  } catch (error) {
+    return await handleAccessTokenError(error, isRetry, () =>
+      getUserProfile(true),
+    );
+  }
+};
+
+export { getUserData, getUserProfile };

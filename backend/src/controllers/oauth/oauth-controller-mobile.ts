@@ -6,14 +6,11 @@ import bcrypt from "bcrypt";
 import client from "../../configs/google-client.js";
 
 // validation
-import tokenSchema from "../../validation/headerToken-valid.js";
+import { validToken } from "../../validation/common.js";
 
 // query
-import {
-  createNewUser,
-  updateRefreshToken,
-  findUserByEmail,
-} from "./oauth-query.js";
+import { createNewUser, findUserByEmail } from "./oauth-query.js";
+import { updateRefreshToken } from "../../utils/query/update.js";
 
 // utils
 import { getEnv } from "../../utils/getEnv.js";
@@ -29,7 +26,7 @@ const googleResigterMobile = async (
   next: NextFunction,
 ) => {
   try {
-    const parse = tokenSchema.safeParse(req.token);
+    const parse = validToken.safeParse(req.token);
 
     if (!parse.success) {
       return res

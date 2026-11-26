@@ -19,7 +19,7 @@ const fetchRefreshToken = async () => {
       const clientRefreshToken = await SecureStore.getItemAsync("refreshToken");
 
       const response = await axios.get<RefreshToken>(
-        `${SERVER_HOST}/api/v1/refresh-token`,
+        `${SERVER_HOST}/api/v1/refresh-token/mobile`,
         {
           headers: { Authorization: `Bearer ${clientRefreshToken}` },
         },

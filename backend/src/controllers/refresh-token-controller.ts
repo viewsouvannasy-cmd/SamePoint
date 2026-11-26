@@ -8,7 +8,7 @@ import { generateAccessTokenForMobile } from "../utils/generate/generateToken.js
 import { findUserById } from "../utils/query/findUser.js";
 
 // validation
-import tokenSchema from "../validation/headerToken-valid.js";
+import { validToken } from "../validation/common.js";
 import platformSehema from "../validation/refresh-token-valid.js";
 
 // type
@@ -22,7 +22,7 @@ const refreshToken = async (
   next: NextFunction,
 ) => {
   try {
-    const parse = tokenSchema.safeParse(req.token);
+    const parse = validToken.safeParse(req.token);
     const parseQueryString = platformSehema.safeParse(req.params);
 
     if (!parse.success) {
