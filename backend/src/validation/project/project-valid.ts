@@ -1,5 +1,5 @@
 import z from "zod";
-import { numberId } from "../user-valid.js";
+import { numberId } from "../common.js";
 
 export const createProjectSchema = z.object({
   user_id: numberId,

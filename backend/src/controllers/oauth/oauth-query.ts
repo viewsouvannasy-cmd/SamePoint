@@ -28,26 +28,6 @@ const createNewUser = async ({
     `) as [{ user_id: number }];
 };
 
-const updateRefreshToken = async (
-  platform: "web" | "mobile",
-  hash_token: string,
-  user_id: number,
-) => {
-  if (platform === "web") {
-    await write_sql`
-    UPDATE users 
-    SET refresh_token_web = ${hash_token}
-    WHERE user_id = ${user_id}
-    `;
-  } else {
-    await write_sql`
-    UPDATE users 
-    SET refresh_token_mobile = ${hash_token}
-    WHERE user_id = ${user_id}
-    `;
-  }
-};
-
 const findUserByEmail = async (
   user_email: string,
 ): Promise<[{ user_id: number }] | []> => {
@@ -59,4 +39,4 @@ const findUserByEmail = async (
     `) as [{ user_id: number }];
 };
 
-export { createNewUser, updateRefreshToken, findUserByEmail };
+export { createNewUser, findUserByEmail };

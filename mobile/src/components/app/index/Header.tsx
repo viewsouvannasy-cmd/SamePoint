@@ -2,7 +2,7 @@ import { View, Text, Platform, useColorScheme, Pressable } from "react-native";
 import { useRouter } from "expo-router";
 
 // api
-import { useGetUserData } from "@/api/user/user";
+import { useGetUserProfile } from "@/api/user/user";
 
 // components
 import Avatar from "@/components/avatar/Avatar";
@@ -14,7 +14,7 @@ export function Header() {
 
   const router = useRouter();
 
-  const { data } = useGetUserData();
+  const { data } = useGetUserProfile();
 
   return (
     <View
