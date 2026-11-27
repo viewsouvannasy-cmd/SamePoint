@@ -32,7 +32,7 @@ export const useChangeUserName = () => {
   return useMutation<void, AxiosError<PostResError>, { new_name: string }>({
     mutationFn: (variable) => changeUserName(false, variable),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [...USER, "profile"] });
+      queryClient.invalidateQueries({ queryKey: [...USER] });
     },
   });
 };
