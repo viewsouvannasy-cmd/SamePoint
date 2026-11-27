@@ -9,6 +9,7 @@ import {
 import { useEffect, useState } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useRouter } from "expo-router";
 
 // components
 import Avatar from "@/components/avatar/Avatar";
@@ -23,6 +24,7 @@ const Setting = () => {
   const colorScheme = useColorScheme();
   const isDark = colorScheme === "dark";
   const insets = useSafeAreaInsets();
+  const router = useRouter();
 
   const [theme, setTheme] = useState("");
 
@@ -55,8 +57,8 @@ const Setting = () => {
     >
       <View className="gap-5">
         {/* =========== profile ======= */}
-        <View className="bg-background-secondary-muted flex-row items-center justify-between gap-5 rounded-3xl p-3.5">
-          <View className="flex-1 flex-row gap-5">
+        <View className="bg-background-secondary-muted flex-row items-center justify-between gap-3 rounded-3xl p-3.5">
+          <View className="flex-1 flex-row gap-4">
             {!userData ? (
               <View className="size-16 rounded-full bg-gray-300" />
             ) : (
@@ -82,7 +84,7 @@ const Setting = () => {
           </View>
 
           <Pressable className="bg-background border-border shrink-0 rounded-full border p-3">
-            <Text className="text-foreground font-medium">Edit</Text>
+            <Icon name="camera" color={isDark ? "#fff" : "#000"} />
           </Pressable>
         </View>
 
@@ -93,7 +95,10 @@ const Setting = () => {
           </Text>
 
           <View className="bg-border gap-px overflow-hidden rounded-3xl">
-            <View className="bg-background-secondary-muted flex-row items-center justify-between p-4">
+            <Pressable
+              onPress={() => router.push("/(setting)/change-user-name")}
+              className="bg-background-secondary-muted active:bg-border flex-row items-center justify-between p-4"
+            >
               <View className="flex-row items-center gap-3">
                 <View className="flex h-6 w-6 items-center justify-center">
                   <Icon
@@ -116,7 +121,7 @@ const Setting = () => {
                   color={isDark ? "#b5b5b5" : "#525252"}
                 />
               </View>
-            </View>
+            </Pressable>
 
             <View className="bg-background-secondary-muted flex-row items-center justify-between p-4">
               <View className="flex-row items-center gap-3">

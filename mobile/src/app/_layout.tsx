@@ -17,6 +17,7 @@ export default function RootLayout() {
           <Stack.Screen name="index" options={{ headerShown: false }} />
           <Stack.Screen name="(tab)" options={{ headerShown: false }} />
           <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+
           <Stack.Screen
             name="(project)/create-project"
 
@@ -44,6 +45,23 @@ export default function RootLayout() {
                 backgroundColor: isDark ? "#111111" : "#ffffff",
               },
               title: "Setting",
+              headerTitleStyle: {
+                fontSize: 18,
+                fontWeight: "600",
+                color: isDark ? "#ffffff" : "#000000",
+              },
+              headerTransparent: false,
+              headerBackButtonDisplayMode: "minimal",
+              headerShadowVisible: false,
+            }}
+          />
+          <Stack.Screen
+            name="(setting)/change-user-name"
+            options={{
+              headerStyle: {
+                backgroundColor: isDark ? "#111111" : "#ffffff",
+              },
+              title: "Change user name",
               headerTitleStyle: {
                 fontSize: 18,
                 fontWeight: "600",

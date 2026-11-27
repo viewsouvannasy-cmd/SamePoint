@@ -1,5 +1,5 @@
 // library
-import axios from "axios";
+import axios, { isAxiosError } from "axios";
 
 // utils
 import { handleAccessTokenError } from "@/utils/handleError";
@@ -44,4 +44,32 @@ const getUserProfile = async (isRetry = false): Promise<UserProfile> => {
   }
 };
 
-export { getUserData, getUserProfile };
+const changeUserName = async (
+  isRetry = false,
+  { new_name }: { new_name: string },
+): Promise<void> => {
+  try {
+    const accessToken = getAccessToken();
+    await axios.put<UserProfile>(
+      `${SERVER_HOST}/api/v1/user/user-name`,
+      {
+        new_name,
+      },
+      {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      },
+    );
+  } catch (error) {
+    if (isAxiosError(error) && error.response) {
+      if (error.status === 400) {
+        throw error;
+      }
+    }
+
+    return await handleAccessTokenError(error, isRetry, () =>
+      changeUserName(true, { new_name }),
+    );
+  }
+};
+
+export { getUserData, getUserProfile, changeUserName };

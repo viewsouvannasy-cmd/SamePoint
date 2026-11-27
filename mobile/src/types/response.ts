@@ -11,7 +11,7 @@ export interface RefreshToken extends BaseReponse {
   data: [{ accessToken: string }];
 }
 
-export interface CreateProjectError extends Omit<BaseReponse, "msg"> {
+export interface PostResError extends Omit<BaseReponse, "msg"> {
   msg: {
     point: string;
     content: string;

@@ -8,8 +8,7 @@ import { generateAccessTokenForMobile } from "../utils/generate/generateToken.js
 import { findUserById } from "../utils/query/findUser.js";
 
 // validation
-import { validToken } from "../validation/common.js";
-import platformSehema from "../validation/refresh-token-valid.js";
+import refreshTokenSchema from "../validation/refresh-token-valid.js";
 
 // type
 import type { Request, Response, NextFunction } from "express";
@@ -22,8 +21,10 @@ const refreshToken = async (
   next: NextFunction,
 ) => {
   try {
-    const parse = validToken.safeParse(req.token);
-    const parseQueryString = platformSehema.safeParse(req.params);
+    const parse = refreshTokenSchema.safeParse({
+      token: req.token,
+      ...req.params,
+    });
 
     if (!parse.success) {
       return res
@@ -31,16 +32,7 @@ const refreshToken = async (
         .json({ ok: false, msg: parse.error.issues[0].message, data: [] });
     }
 
-    if (!parseQueryString.success) {
-      return res.status(401).json({
-        ok: false,
-        msg: parseQueryString.error.issues[0].message,
-        data: [],
-      });
-    }
-
-    const token = parse.data;
-    const { platform } = parseQueryString.data;
+    const { token, platform } = parse.data;
 
     const payload = jwt.verify(
       token,

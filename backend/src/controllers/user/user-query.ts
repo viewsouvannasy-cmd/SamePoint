@@ -1,4 +1,4 @@
-import { read_sql } from "../../configs/database.js";
+import { read_sql, write_sql } from "../../configs/database.js";
 
 // types
 import type { User } from "../../types/query.js";
@@ -29,4 +29,13 @@ export const readUserProfile = async (user_id: number) => {
     FROM users  
     WHERE user_id = ${user_id}
     `) as [{ avatar_seed: string; profile_url: string }] | [];
+};
+
+export const updateUserName = async (user_id: number, new_name: string) => {
+  return (await write_sql`
+    UPDATE users 
+    SET user_name = ${new_name}
+    WHERE user_id = ${user_id}
+    RETURNING user_id
+    `) as [{ user_id: number }] | [];
 };
