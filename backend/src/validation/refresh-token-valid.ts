@@ -1,7 +1,11 @@
 import z from "zod";
 
-const platformSchema = z.object({
-  platform: z.enum(["mobile", "web"]),
+import { validPlatform } from "./enums.js";
+import { validToken } from "./common.js";
+
+const refreshTokenSchema = z.object({
+  token: validToken,
+  platform: validPlatform,
 });
 
-export default platformSchema;
+export default refreshTokenSchema;

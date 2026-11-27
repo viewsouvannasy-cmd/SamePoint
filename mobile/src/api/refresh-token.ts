@@ -5,7 +5,7 @@ import * as SecureStore from "expo-secure-store";
 
 import { SERVER_HOST } from "@/config/env";
 
-import type { IsUserLogin as RefreshToken } from "@/types/response";
+import type { RefreshToken } from "@/types/response";
 
 let refreshPromise: null | Promise<void> = null;
 
@@ -19,7 +19,7 @@ const fetchRefreshToken = async () => {
       const clientRefreshToken = await SecureStore.getItemAsync("refreshToken");
 
       const response = await axios.get<RefreshToken>(
-        `${SERVER_HOST}/api/v1/refresh-token`,
+        `${SERVER_HOST}/api/v1/refresh-token/mobile`,
         {
           headers: { Authorization: `Bearer ${clientRefreshToken}` },
         },

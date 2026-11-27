@@ -7,6 +7,10 @@ import CheckIcon from "./icon-list/CheckIcon";
 import ComposeIcon from "./icon-list/ComposeIcon";
 import ArchiveIcon from "./icon-list/ArchiveIcon";
 import TrashIcon from "./icon-list/TrashIcon";
+import CameraIcon from "./icon-list/CameraIcon";
+import UserIcon from "./icon-list/UserIcon";
+import MailIcon from "./icon-list/MailIcon";
+import ChevronIcon from "./icon-list/ChevronIcon";
 
 // types
 import type { IconType } from "@/types/icon";
@@ -22,6 +26,10 @@ const icons = {
   compose: ComposeIcon,
   archive: ArchiveIcon,
   trash: TrashIcon,
+  user: UserIcon,
+  mail: MailIcon,
+  chevron: ChevronIcon,
+  camera: CameraIcon,
 } satisfies Record<string, ComponentType<IconType>>;
 
 type IconName = keyof typeof icons;

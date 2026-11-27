@@ -7,11 +7,11 @@ export interface GoogleResigter extends BaseReponse {
   data: [{ accessToken: string; refreshToken: string }];
 }
 
-export interface IsUserLogin extends BaseReponse {
+export interface RefreshToken extends BaseReponse {
   data: [{ accessToken: string }];
 }
 
-export interface CreateProjectError extends Omit<BaseReponse, "msg"> {
+export interface PostResError extends Omit<BaseReponse, "msg"> {
   msg: {
     point: string;
     content: string;

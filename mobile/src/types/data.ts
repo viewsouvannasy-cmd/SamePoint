@@ -3,12 +3,20 @@ import type { BaseReponse } from "./response";
 export interface User extends BaseReponse {
   data: [
     {
-      user_id: number;
       user_name: string;
       user_email: string;
       avatar_seed: string;
-      is_active: true;
-      create_at: Date;
+      profile_url: string;
+      total_archive_project: number;
+    },
+  ];
+}
+
+export interface UserProfile extends BaseReponse {
+  data: [
+    {
+      avatar_seed: string;
+      profile_url: string;
     },
   ];
 }

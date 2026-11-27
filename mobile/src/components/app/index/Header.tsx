@@ -2,7 +2,7 @@ import { View, Text, Platform, useColorScheme, Pressable } from "react-native";
 import { useRouter } from "expo-router";
 
 // api
-import { useGetUserData } from "@/api/user/user";
+import { useGetUserProfile } from "@/api/user/user";
 
 // components
 import Avatar from "@/components/avatar/Avatar";
@@ -14,7 +14,7 @@ export function Header() {
 
   const router = useRouter();
 
-  const { data } = useGetUserData();
+  const { data } = useGetUserProfile();
 
   return (
     <View
@@ -31,7 +31,9 @@ export function Header() {
         {!data ? (
           <View className="h-10.75 w-10.75 rounded-full bg-gray-400" />
         ) : (
-          <Avatar seed={data.data[0]?.avatar_seed} size={38} dark={isDark} />
+          <Pressable onPress={() => router.push("/(setting)")}>
+            <Avatar seed={data.data[0]?.avatar_seed} size={38} dark={isDark} />
+          </Pressable>
         )}
       </View>
     </View>

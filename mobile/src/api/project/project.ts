@@ -16,7 +16,7 @@ import { PROJECT_LIST } from "@/constants/key-query";
 
 // type
 import type { AxiosError } from "axios";
-import type { CreateProjectError } from "@/types/response";
+import type { PostResError } from "@/types/response";
 
 const useGetProjectListDate = () => {
   return useQuery({
@@ -35,7 +35,7 @@ const useSearchProject = (search: string) => {
 const useCreateProject = () => {
   return useMutation<
     void,
-    AxiosError<CreateProjectError>,
+    AxiosError<PostResError>,
     { project_name: string; describe: string }
   >({
     mutationFn: (variable) => createProject(false, variable),

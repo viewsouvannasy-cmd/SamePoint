@@ -1,6 +1,6 @@
 import z from "zod";
 
-import { numberId } from "../../user-valid.js";
+import { numberId } from "../../common.js";
 
 export const acceptMemberSchema = z.object({
   user_id: numberId,
