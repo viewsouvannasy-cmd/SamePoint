@@ -3,22 +3,21 @@ import { useState, useEffect } from "react";
 import { View, useColorScheme } from "react-native";
 import { Redirect } from "expo-router";
 
-// api
-import { isUserLogin } from "@/api/auth/auth-func";
-
 // components
 import { SamePointLoader } from "@/components/load-state/SamePointLoader";
+import { fetchRefreshToken } from "@/api/refresh-token";
 
 export default function App() {
   const colorScheme = useColorScheme();
   const [isLogin, setIsLogin] = useState<null | boolean>(null);
 
   useEffect(() => {
-    const fetchUserLogin = async () => {
-      const result = await isUserLogin();
-      setIsLogin(result.ok);
+    const fetch = async () => {
+      await fetchRefreshToken()
+        .then(() => setIsLogin(true))
+        .catch(() => setIsLogin(false));
     };
-    fetchUserLogin();
+    fetch();
   }, []);
 
   if (isLogin === true) {

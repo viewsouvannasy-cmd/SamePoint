@@ -1,11 +1,18 @@
 // library
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { AxiosError } from "axios";
+
+// config
+import queryClient from "@/config/query-client";
 
 // func
-import { getUserData, getUserProfile } from "./user-func";
+import { changeUserName, getUserData, getUserProfile } from "./user-func";
 
 // key
 import { USER } from "@/constants/key-query";
+
+// type
+import type { PostResError } from "@/types/response";
 
 export const useGetUserData = () => {
   return useQuery({
@@ -18,5 +25,14 @@ export const useGetUserProfile = () => {
   return useQuery({
     queryFn: () => getUserProfile(false),
     queryKey: [...USER, "profile"],
+  });
+};
+
+export const useChangeUserName = () => {
+  return useMutation<void, AxiosError<PostResError>, { new_name: string }>({
+    mutationFn: (variable) => changeUserName(false, variable),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [...USER] });
+    },
   });
 };
